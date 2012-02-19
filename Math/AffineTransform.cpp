@@ -37,8 +37,8 @@ Matrix3 rh::newAffineRotation(float radians)
 	float cosa = cos(radians);
 
 	return Matrix3(
-		 cosa, -sina, 0,
-		 sina,  cosa, 0,
+		 cosa,  sina, 0,
+		 -sina, cosa, 0,
 		 0,     0,   1);
 }
 
@@ -67,6 +67,17 @@ Vector2 lh::transform(const Matrix3 matrix, Vector2& vector, float z)
 	return Vector2(
 		matrix(0,0) * vector.x + matrix(0,1) * vector.y + matrix(0,2) * z,
 		matrix(1,0) * vector.x + matrix(1,1) * vector.y + matrix(1,2) * z);
+}
+
+Matrix3 lh::newAffineRotation(float radians)
+{
+	float sina = sin(radians);
+	float cosa = cos(radians);
+
+	return Matrix3(
+		 cosa, -sina, 0,
+		 sina,  cosa, 0,
+		 0,     0,   1);
 }
 
 Matrix3 lh::newAffineTranslation(float x, float y)

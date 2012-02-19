@@ -67,10 +67,7 @@ namespace math {
 		/**
 		* Creates a 2D left hand clockwise rotation affine transformation
 		*/
-		inline Matrix3 newAffineRotation(float radians)
-		{
-			return rh::newAffineRotation(radians);
-		}
+		Matrix3 newAffineRotation(float radians);
 
 		/**
 		* Creates a 2D left hand scale affine transformation
