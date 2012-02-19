@@ -26,7 +26,7 @@
 #include <iostream>
 #include "MathUtil.hpp"
 
-namespace s3d {
+namespace fun {
 namespace math {
 	/**
 		This class represents a 2 coordinate space mathematical vector.

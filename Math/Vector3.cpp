@@ -25,7 +25,7 @@
 #include "Vector3.hpp"
 #include "MathUtil.hpp"
 
-using namespace s3d::math;
+using namespace fun::math;
 
 Vector3::Vector3() : x(0), y(0), z(0) {}
 
@@ -160,7 +160,7 @@ Vector3 Vector3::operator *(float c) const
     return (Vector3(x * c, y * c, z * c));
 }
 
-Vector3 s3d::math::operator * (float scalar, const Vector3& vector)
+Vector3 fun::math::operator * (float scalar, const Vector3& vector)
 {
 	return vector * scalar;
 }
@@ -297,7 +297,7 @@ Vector3& Vector3::rotateAxis(float angle, const Vector3& axis)
     return *this;
 }
 
-std::ostream& s3d::math::operator<<(std::ostream& output, const Vector3& p)
+std::ostream& fun::math::operator<<(std::ostream& output, const Vector3& p)
 {
 	output << "(" << p.x << "," << p.y << "," << p.z << ")";
 	return output;	

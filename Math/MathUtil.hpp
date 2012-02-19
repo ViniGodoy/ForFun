@@ -23,7 +23,7 @@
 
 #include <cmath>
 
-namespace s3d {
+namespace fun {
 namespace math {
 	static const double PI = 3.14159265358979323846;
 	static const double E = 2.7182818284590452354;

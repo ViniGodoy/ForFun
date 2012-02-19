@@ -24,7 +24,7 @@
 #include "Vector2.hpp"
 #include "Matrix3.hpp"
 
-namespace s3d {
+namespace fun {
 namespace math {
 	namespace rh {
 		Vector2 transform(const Matrix3 matrix, Vector2& vector, float z=1.0f);

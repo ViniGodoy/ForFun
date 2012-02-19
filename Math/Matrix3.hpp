@@ -21,7 +21,7 @@
 #ifndef __MATRIX3_H__
 #define __MATRIX3_H__
 
-namespace s3d {
+namespace fun {
 namespace math {	
 	class Vector3;
 

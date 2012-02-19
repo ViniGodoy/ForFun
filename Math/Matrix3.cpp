@@ -23,7 +23,7 @@
 #include <cmath>
 #include <algorithm>
 
-using namespace s3d::math;
+using namespace fun::math;
 
 /**
 * Represents a 3x3 matrix.
@@ -150,7 +150,7 @@ Matrix3 Matrix3::operator * (const Matrix3& other) const
 	return C;
 }
 
-Matrix3 s3d::math::operator *(float scalar, const Matrix3& matrix)
+Matrix3 fun::math::operator *(float scalar, const Matrix3& matrix)
 {
 	return matrix * scalar;
 }
@@ -206,7 +206,7 @@ Matrix3& Matrix3::transpose()
 	return (*this = math::transpose(*this));
 }
 
-Matrix3 s3d::math::inverse(const Matrix3& A)
+Matrix3 fun::math::inverse(const Matrix3& A)
 {
     return Matrix3 (
 		A.e() * A.k() - A.f() * A.h(), 
@@ -222,7 +222,7 @@ Matrix3 s3d::math::inverse(const Matrix3& A)
 		A.a() * A.e() - A.b() * A.d());
 }
 
-Matrix3 s3d::math::transpose(const Matrix3& matrix)
+Matrix3 fun::math::transpose(const Matrix3& matrix)
 {
 	Matrix3 other;
 	for (int i = 0; i < 3; i++)

@@ -20,7 +20,7 @@
 ******************************************************************************/
 #include "AffineTransform.hpp"
 
-using namespace s3d::math;
+using namespace fun::math;
 
 #pragma region Right hand
 

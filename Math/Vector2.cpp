@@ -25,7 +25,7 @@
 #include <stdexcept>
 #include <sstream>
 
-using namespace s3d::math;
+using namespace fun::math;
 
 Vector2::Vector2() : x(0), y(0)
 {
@@ -181,7 +181,7 @@ Vector2 Vector2::operator *(float c) const
 	return Vector2(x*c, y*c);
 }
 
-Vector2 s3d::math::operator*(float scalar, const Vector2& vector)
+Vector2 fun::math::operator*(float scalar, const Vector2& vector)
 {
 	return vector * scalar;
 }
@@ -211,7 +211,7 @@ float Vector2::relativeAngleBetween(const Vector2 v2) const
 	return angle() - v2.angle();
 }
 
-std::ostream& s3d::math::operator<<(std::ostream& output, const Vector2& p)
+std::ostream& fun::math::operator<<(std::ostream& output, const Vector2& p)
 {
 	output << "(" << p.x << "," << p.y << ")";
 	return output;
