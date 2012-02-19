@@ -1,0 +1,17 @@
+For Fun 3D Renderer
+-------------------
+
+The purpose of this project is to build a programmable 3D pipeline, entirely 
+written in software, using SDL and LUA. 
+
+One of the goals is to provide clear and relatively optimized code, without 
+loosing clarity. Since the result framework will be terribly slow compared to 
+hardware accelerated alternatives such as OpenGL and DirectX, at least it 
+should serve as a solid study base for computer graphics students.
+
+The project is build for Windows Platform, using Visual Studio 2010. The code 
+may use C++11 code, such as lambda. Portability is NOT a goal.
+
+History
+---------
+18/02/2012 - Project created with some 2D mathematical classes.
