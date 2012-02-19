@@ -76,6 +76,7 @@
   <ItemGroup>
     <ClCompile Include="AffineTransform.cpp" />
     <ClCompile Include="Matrix3.cpp" />
+    <ClCompile Include="Matrix4.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector3.cpp" />
   </ItemGroup>
@@ -83,6 +84,7 @@
     <ClInclude Include="AffineTransform.hpp" />
     <ClInclude Include="MathUtil.hpp" />
     <ClInclude Include="Matrix3.hpp" />
+    <ClInclude Include="Matrix4.hpp" />
     <ClInclude Include="Vector2.hpp" />
     <ClInclude Include="Vector3.hpp" />
   </ItemGroup>
