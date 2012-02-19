@@ -9,8 +9,8 @@ loosing clarity. Since the result framework will be terribly slow compared to
 hardware accelerated alternatives such as OpenGL and DirectX, at least it 
 should serve as a solid study base for computer graphics students.
 
-The project is build for Windows Platform, using Visual Studio 2010. The code 
-may use C++11 code, such as lambda. Portability is NOT a goal.
+The project is being constructed for Windows Platform using Visual Studio 2010.
+The code may use C++11 code, such as lambda. Portability is NOT a goal.
 
 History
 ---------
