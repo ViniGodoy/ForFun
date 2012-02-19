@@ -27,8 +27,8 @@ using namespace fun::math;
 Vector2 rh::transform(const Matrix3 matrix, Vector2& vector, float z)
 {
 	return Vector2(
-		vector.x * matrix.a() + vector.y * matrix.b() + z * matrix.c(),
-		vector.x * matrix.d() + vector.y * matrix.e() + z * matrix.f());
+		vector.x * matrix(0,0) + vector.y * matrix(0,1) + z * matrix(0,2),
+		vector.x * matrix(1,0) + vector.y * matrix(1,1) + z * matrix(1,2));
 }
 
 Matrix3 rh::newAffineRotation(float radians)
@@ -65,8 +65,8 @@ Matrix3 rh::newAffineTranslation(float x, float y)
 Vector2 lh::transform(const Matrix3 matrix, Vector2& vector, float z)
 {
 	return Vector2(
-		matrix.a() * vector.x + matrix.d() * vector.y + matrix.g() * z,
-		matrix.b() * vector.x + matrix.e() * vector.y + matrix.h() * z);
+		matrix(0,0) * vector.x + matrix(0,1) * vector.y + matrix(0,2) * z,
+		matrix(1,0) * vector.x + matrix(1,1) * vector.y + matrix(1,2) * z);
 }
 
 Matrix3 lh::newAffineTranslation(float x, float y)

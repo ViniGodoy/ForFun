@@ -18,29 +18,18 @@
 * http://creativecommons.org/licenses/by-sa/2.5/br/
 *
 ******************************************************************************/
-#ifndef __MATRIX3_H__
-#define __MATRIX3_H__
+#ifndef __MATRIX3_HPP__
+#define __MATRIX3_HPP__
+
+#include <iostream>
 
 namespace fun {
 namespace math {	
-	class Vector3;
-
 	/**
 	* Represents a 3x3 matrix.
 	* <p>
 	* All mathematical methods alter the matrix itself (e.g. myMatrix.inverse()). 
-	* Functions, with the same method names, are provided as an copy alternative (e.g. transpose(myMatrix)).
-	* <p>
-	* This class also provides convenient access methods to retrieve or set the matrix elements as:
-	*
-	* <pre>
-	* [a b c]
-	* [d e f]
-	* [g h k]
-	* </pre>
-	*
-	* These methods are named {@link #a()}, {@link #b()}, {@link #c()}, {@link #d()}, {@link #e()},
-	* {@link #f()}, {@link #g()}, {@link #h()} and {@link #k()}.
+	* Functions, with the same method names, are provided as an copy alternative (e.g. m = inverse(myMatrix)).
 	*
 	* @author Vinicius G. Mendonca
 	*/
@@ -80,140 +69,10 @@ namespace math {
 				return A[row][col];
 			}
 
-			/**
-			* Change the value of the element in the given row and column
-			*
-			* @param row The row
-			* @param col The column
-			* @param value The value to set.
-			* @return This matrix.
-			*/
-			inline Matrix3& set(int row, int col, float value)
-			{
-				A[row][col] = value;
-				return *this;
-			}
-
 			Matrix3& set(
 				float a, float b, float c,
 				float d, float e, float f,
 				float g, float h, float k);
-			/**
-			* Returns the "a" element in the following mapping:
-			*
-			* <pre>
-			* [a b c]
-			* [d e f]
-			* [g h k]
-			* </pre>
-			*
-			* @return the A[0][0] element.
-			*/
-			inline float a() const { return A[0][0]; }
-			/**
-			* Returns the "b" element in the following mapping:
-			*
-			* <pre>
-			* [a b c]
-			* [d e f]
-			* [g h k]
-			* </pre>
-			*
-			* @return the A[0][1] element.
-			*/
-			inline float b() const { return A[0][1]; }
-
-			/**
-			* Returns the "c" element in the following mapping:
-			*
-			* <pre>
-			* [a b c]
-			* [d e f]
-			* [g h k]
-			* </pre>
-			*
-			* @return the A[0][2] element.
-			*/
-			inline float c() const { return A[0][2]; }
-
-			/**
-			* Returns the "d" element in the following mapping:
-			*
-			* <pre>
-			* [a b c]
-			* [d e f]
-			* [g h k]
-			* </pre>
-			*
-			* @return the A[1][0] element.
-			*/
-			inline float d() const { return A[1][0]; }
-
-			/**
-			* Returns the "e" element in the following mapping:
-			*
-			* <pre>
-			* [a b c]
-			* [d e f]
-			* [g h k]
-			* </pre>
-			*
-			* @return the A[1][1] element.
-			*/
-			inline float e() const { return A[1][1]; }
-
-			/**
-			* Returns the "e" element in the following mapping:
-			*
-			* <pre>
-			* [a b c]
-			* [d e f]
-			* [g h k]
-			* </pre>
-			*
-			* @return the A[1][1] element.
-			*/
-			inline float f() const { return A[1][2]; }
-
-			/**
-			* Returns the "g" element in the following mapping:
-			*
-			* <pre>
-			* [a b c]
-			* [d e f]
-			* [g h k]
-			* </pre>
-			*
-			* @return the A[2][0] element.
-			*/
-			inline float g() const { return A[2][0]; }
-
-			/**
-			* Returns the "h" element in the following mapping:
-			*
-			* <pre>
-			* [a b c]
-			* [d e f]
-			* [g h k]
-			* </pre>
-			*
-			* @return the A[2][1] element.
-			*/
-			inline float h() const { return A[2][1]; }
-
-	
-			/**
-			* Returns the "k" element in the following mapping:
-			*
-			* <pre>
-			* [a b c]
-			* [d e f]
-			* [g h k]
-			* </pre>
-			*
-			* @return the A[2][2] element.
-			*/
-			inline float k() const { return A[2][2]; }
 
 			inline float& operator() (int row, int col)
 			{
@@ -249,7 +108,7 @@ namespace math {
 			bool isInvertible() const;
 
 			/**
-			* Inverses this matrix. Not all matrices are invertible, so check the {@link #isInvertible()} method prior to
+			* Inverses this matrix. Not all matrices are invertible, so check the {@link #isInvertiblA[1][1]} method prior to
 			* calling this method if you are not sure if you can inverse this matrix or not.
 			*
 			* <pre>
@@ -257,8 +116,8 @@ namespace math {
 			* </pre>
 			*
 			* @return This matrix, after inversion. If the matrix is not invertible, the result will be undefined.
-			* @see #isInvertible()
-			* @see #inverse()
+			* @see #isInvertiblA[1][1]
+			* @see #inversA[1][1]
 			*/
 			Matrix3& inverse();
 
@@ -289,5 +148,6 @@ namespace math {
 
 	Matrix3 transpose(const Matrix3& matrix);
 	Matrix3 inverse(const Matrix3& matrix);
+	std::ostream& operator<<(std::ostream& output, const Matrix3& m);
 }}
 #endif

@@ -18,8 +18,8 @@
 * http://creativecommons.org/licenses/by-sa/2.5/br/
 *
 ******************************************************************************/
-#ifndef Vector3_H_INCLUDED
-#define Vector3_H_INCLUDED
+#ifndef __VECTOR3_HPP__
+#define __VECTOR3_HPP__
 
 #include <iostream>
 

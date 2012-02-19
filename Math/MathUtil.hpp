@@ -18,8 +18,8 @@
 * http://creativecommons.org/licenses/by-sa/2.5/br/
 *
 ******************************************************************************/
-#ifndef MATHUTIL_H_INCLUDED
-#define MATHUTIL_H_INCLUDED
+#ifndef __MATHUTIL_HPP__
+#define __MATHUTIL_HPP__
 
 #include <cmath>
 

@@ -20,8 +20,8 @@
 ******************************************************************************/
 
 /* Vinícius Godoy de Mendonça */
-#ifndef __Vector2_H__
-#define __Vector2_H__
+#ifndef __VECTOR2_HPP__
+#define __VECTOR2_HPP__
 
 #include <iostream>
 #include "MathUtil.hpp"

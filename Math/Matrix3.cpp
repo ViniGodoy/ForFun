@@ -25,28 +25,6 @@
 
 using namespace fun::math;
 
-/**
-* Represents a 3x3 matrix.
-* <p>
-* All mathematical operator methods comes with two signatures. The first one creates a copy of the matrix, prior to the
-* operation. The second one, suffixed with "Me", applies the operation the calling matrix.
-* <p>
-* This class also provides convenient access methods to retrieve or set the matrix elements as:
-*
-* <pre>
-* [a b c]
-* [d e f]
-* [g h k]
-* </pre>
-*
-* These methods are named {@link #a()}, {@link #b()}, {@link #c()}, {@link #d()}, {@link #e()},
-* {@link #f()}, {@link #g()}, {@link #h()} and {@link #k()}.
-* <p>
-* In other to use this matrix as an Affine Transformation, take a look at the static functions defined in 
-* AffineTransform.h
-*
-* @author Vinicius G. Mendonca
-*/
 Matrix3::Matrix3()
 {
 	for (int i = 0; i < 3; ++i)
@@ -75,7 +53,7 @@ Matrix3 Matrix3::newIdentity()
 /** Copy constructor */
 Matrix3::Matrix3(const Matrix3& other)
 {
-	memcpy(A, (void*)(other.A), sizeof(other.A));
+	memcpy(A, other.A, sizeof(other.A));
 }
 
 Matrix3& Matrix3::set(
@@ -101,16 +79,15 @@ Matrix3& Matrix3::set(
 /** Assignment operator */
 Matrix3& Matrix3::operator=(const Matrix3& other)
 {
-	return set(other.a(), other.b(), other.c(),
-			   other.d(), other.e(), other.f(),
-			   other.g(), other.h(), other.k());
+	memcpy(A, other.A, sizeof(A));
+	return *this;
 }
 	
 Matrix3& Matrix3::operator += (const Matrix3& other)
 {
 	for (int i = 0; i < 3; ++i)
 		for (int j = 0; j < 3; ++j)
-			A[i][j] += other.A[i][j];
+			A[i][j] += other(i,j);
 
 	return *this;
 }
@@ -124,7 +101,7 @@ Matrix3& Matrix3::operator -= (const Matrix3& other)
 {
 	for (int i = 0; i < 3; ++i)
 		for (int j = 0; j < 3; ++j)
-			A[i][j] -= other.A[i][j];
+			A[i][j] -= other(i,j);
 
 	return *this;
 }
@@ -145,7 +122,7 @@ Matrix3 Matrix3::operator * (const Matrix3& other) const
 	for (int i = 0; i < 3; ++i)
 		for (int j = 0; j < 3; ++j)
 			for (int k = 0; k < 3; ++k)
-				C.A[i][j] += A[i][k] * other.A[k][j];
+				C(i,j) += A[i][k] * other(k,j);
 
 	return C;
 }
@@ -173,7 +150,7 @@ bool Matrix3::operator == (Matrix3& other) const
 {
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
-			if (A[i][j] != other.A[i][j])
+			if (A[i][j] != other(i,j))
 				return false;
 	return true;
 }
@@ -186,9 +163,9 @@ bool Matrix3::operator != (Matrix3& other) const
 
 float Matrix3::determinant() const
 {
-	return a() * (e() * k() - f() * h()) +
-           b() * (f() * g() - k() * d()) +
-           c() * (d() * h() - e() * g());
+	return A[0][0] * (A[1][1] * A[2][2] - A[1][2] * A[2][1]) +
+           A[0][1] * (A[1][2] * A[2][0] - A[2][2] * A[1][0]) +
+           A[0][2] * (A[1][0] * A[2][1] - A[1][1] * A[2][0]);
 }
 
 bool Matrix3::isInvertible() const
@@ -203,23 +180,26 @@ Matrix3& Matrix3::inverse()
 
 Matrix3& Matrix3::transpose()
 {
-	return (*this = math::transpose(*this));
+	std::swap(A[0][1], A[1][0]);
+	std::swap(A[0][2], A[2][0]);
+	std::swap(A[1][2], A[2][1]);
+	return *this;
 }
 
-Matrix3 fun::math::inverse(const Matrix3& A)
+Matrix3 fun::math::inverse(const Matrix3& m)
 {
     return Matrix3 (
-		A.e() * A.k() - A.f() * A.h(), 
-		A.c() * A.h() - A.b() * A.k(),
-		A.b() * A.f() - A.c() * A.e(),
+		m(1,1) * m(2,2) - m(1,2) * m(2,1), 
+		m(0,2) * m(2,1) - m(0,1) * m(2,2),
+		m(0,1) * m(1,2) - m(0,2) * m(1,1),
 
-		A.f() * A.g() - A.d() * A.k(),
-		A.a() * A.k() - A.c() * A.g(),
-		A.c() * A.d() - A.a() * A.f(),
+		m(1,2) * m(2,0) - m(1,0) * m(2,2),
+		m(0,0) * m(2,2) - m(0,2) * m(2,0),
+		m(0,2) * m(1,0) - m(0,0) * m(1,2),
 
-		A.d() * A.h() - A.e() * A.g(),
-		A.b() * A.g() - A.a() * A.h(),
-		A.a() * A.e() - A.b() * A.d());
+		m(1,0) * m(2,1) - m(1,1) * m(2,0),
+		m(0,1) * m(2,0) - m(0,0) * m(2,1),
+		m(0,0) * m(1,1) - m(0,1) * m(1,0));
 }
 
 Matrix3 fun::math::transpose(const Matrix3& matrix)
@@ -230,4 +210,12 @@ Matrix3 fun::math::transpose(const Matrix3& matrix)
 			other(i, j) = matrix(j, i);
 
 	return other;	
+}
+
+std::ostream& fun::math::operator<<(std::ostream& output, const Matrix3& m)
+{
+	output << "((" << m(0,0) << "," << m(0,1) << "," << m(0,2) << "), "
+			<< "(" << m(1,0) << "," << m(1,1) << "," << m(1,2) << "), "
+			<< "(" << m(2,0) << "," << m(2,1) << "," << m(2,2) << "))";
+	return output;	
 }
