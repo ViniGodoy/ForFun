@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ForFunTests", "ForFunTests\ForFunTests.vcxproj", "{A94B456A-FAC2-4E98-8018-3A1D3065307E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{281826D5-5CA4-44A9-B786-863E465FFC84} = {281826D5-5CA4-44A9-B786-863E465FFC84}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Math", "..\src\Math\Math.vcxproj", "{281826D5-5CA4-44A9-B786-863E465FFC84}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A94B456A-FAC2-4E98-8018-3A1D3065307E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A94B456A-FAC2-4E98-8018-3A1D3065307E}.Debug|Win32.Build.0 = Debug|Win32
+		{A94B456A-FAC2-4E98-8018-3A1D3065307E}.Release|Win32.ActiveCfg = Release|Win32
+		{A94B456A-FAC2-4E98-8018-3A1D3065307E}.Release|Win32.Build.0 = Release|Win32
+		{281826D5-5CA4-44A9-B786-863E465FFC84}.Debug|Win32.ActiveCfg = Debug|Win32
+		{281826D5-5CA4-44A9-B786-863E465FFC84}.Debug|Win32.Build.0 = Debug|Win32
+		{281826D5-5CA4-44A9-B786-863E465FFC84}.Release|Win32.ActiveCfg = Release|Win32
+		{281826D5-5CA4-44A9-B786-863E465FFC84}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

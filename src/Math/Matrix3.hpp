@@ -57,18 +57,6 @@ namespace math {
 			/** Assignment operator */
 			Matrix3& operator=(const Matrix3& other);
 
-			/**
-			* Returns the element on the given row and column.
-			*
-			* @param row The row to retrieve
-			* @param col The column to retrieve
-			* @return The element value
-			*/
-			inline float get(int row, int col) const
-			{
-				return A[row][col];
-			}
-
 			Matrix3& set(
 				float a, float b, float c,
 				float d, float e, float f,
