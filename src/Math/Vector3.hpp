@@ -230,11 +230,6 @@ namespace math {
 		return Vector3(v).rotateX(radians);
 	}
 
-	inline Vector3 cross(Vector3 v1, Vector3 v2)
-	{
-		return Vector3(v1).cross(v2);
-	}
-
 	inline Vector3 rotateY(const Vector3& v, float radians)
 	{
 		return Vector3(v).rotateY(radians);
@@ -243,6 +238,11 @@ namespace math {
 	inline Vector3 rotateZ(const Vector3& v, float radians)
 	{
 		return Vector3(v).rotateZ(radians);
+	}
+
+	inline Vector3 cross(Vector3 v1, Vector3 v2)
+	{
+		return Vector3(v1).cross(v2);
 	}
 
 	inline Vector3& rotateAxis(const Vector3& v, float radians, const Vector3& axis)

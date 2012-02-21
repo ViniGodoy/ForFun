@@ -203,8 +203,6 @@ Vector3& Vector3::cross(const Vector3& other)
     return *this;
 }
 
-
-
 Vector3& Vector3::resize(float size)
 {
 	return normalize() *= size;
