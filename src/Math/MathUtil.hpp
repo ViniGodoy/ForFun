@@ -18,7 +18,7 @@
 * http://creativecommons.org/licenses/by-sa/2.5/br/
 *
 ******************************************************************************/
-#ifndef __MATHUTIL_HPP__
+#if !defined(__MATHUTIL_HPP__)
 #define __MATHUTIL_HPP__
 
 #include <cmath>

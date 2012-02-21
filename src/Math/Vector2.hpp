@@ -20,7 +20,7 @@
 ******************************************************************************/
 
 /* Vinícius Godoy de Mendonça */
-#ifndef __VECTOR2_HPP__
+#if !defined(__VECTOR2_HPP__)
 #define __VECTOR2_HPP__
 
 #include <iostream>

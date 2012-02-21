@@ -18,7 +18,7 @@
 * http://creativecommons.org/licenses/by-sa/2.5/br/
 *
 ******************************************************************************/
-#ifndef __MATRIX4_HPP__
+#if !defined(__MATRIX4_HPP__)
 #define __MATRIX4_HPP__
 
 #include <iostream>

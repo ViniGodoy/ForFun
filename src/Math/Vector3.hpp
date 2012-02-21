@@ -18,7 +18,7 @@
 * http://creativecommons.org/licenses/by-sa/2.5/br/
 *
 ******************************************************************************/
-#ifndef __VECTOR3_HPP__
+#if !defined(__VECTOR3_HPP__)
 #define __VECTOR3_HPP__
 
 #include <iostream>

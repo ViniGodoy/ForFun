@@ -18,7 +18,7 @@
 * http://creativecommons.org/licenses/by-sa/2.5/br/
 *
 ******************************************************************************/
-#ifndef __TRANSFORM_2D_HPP__
+#if !defined(__TRANSFORM_2D_HPP__)
 #define __TRANSFORM_2D_HPP__
 
 #include "Vector3.hpp"
