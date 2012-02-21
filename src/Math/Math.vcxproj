@@ -74,14 +74,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AffineTransform.cpp" />
+    <ClCompile Include="Transform2D.cpp" />
     <ClCompile Include="Matrix3.cpp" />
     <ClCompile Include="Matrix4.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AffineTransform.hpp" />
+    <ClInclude Include="Transform2D.hpp" />
     <ClInclude Include="MathUtil.hpp" />
     <ClInclude Include="Matrix3.hpp" />
     <ClInclude Include="Matrix4.hpp" />
