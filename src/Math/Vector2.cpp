@@ -109,7 +109,7 @@ Vector2& Vector2::resize(float size)
 	return normalize() *= size;
 }
 
-float Vector2::operator[] (long index) const
+const float& Vector2::operator[] (int index) const
 {
     if (index == 0)
         return x;
@@ -121,7 +121,7 @@ float Vector2::operator[] (long index) const
     throw std::out_of_range(ss.str());
 }
 
-float& Vector2::operator[] (long index)
+float& Vector2::operator[] (int index)
 {
     if (index == 0)
         return x;

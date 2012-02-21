@@ -62,38 +62,6 @@ namespace math {
         explicit Vector3(float xyz[3]);
 
         /**
-            Adds to x coordinate
-            @param _x The amount to add in x
-            @return This vector.
-        */
-        Vector3& addX(float _x);
-
-        /**
-            Adds to y coordinate
-            @param _y The amount to add in y
-            @return This vector.
-        */
-        Vector3& addY(float _y);
-
-        /**
-            Adds to z coordinate
-            @param _z The amount to add in z
-            @return This vector.
-        */
-        Vector3& addZ(float _z);
-
-        /**
-            Adds to all vector coordinates
-
-            @param _x The amount to add in x
-            @param _y The amount to add in y
-            @param _z The amount to add in z
-
-            @return This vector.
-        */
-        Vector3& add(float _x, float _y, float _z);
-
-        /**
             Sets the x, y and z coordinates in one single operation.
 
             @param _x The x coordinate
@@ -119,7 +87,7 @@ namespace math {
             and z in index 2. No bounds check are made, so be careful.
             @param index The coordinate index. As descrived above.
         */
-        float& operator [](long index);
+        float& operator [](int index);
 
         /**
             Allows read access to the vector coordinates as if was
@@ -127,7 +95,7 @@ namespace math {
             and z in index 2. No bounds check are made, so be careful.
             @param k The coordinate index. As descrived above.
         */
-        float operator [](long index) const;
+        const float& operator [](int index) const;
 
         /** Assignment operator. z will be assigned to 0. */
         Vector3& operator +=(const Vector3& other);
@@ -138,11 +106,16 @@ namespace math {
         /** Multiplies this vector by the given scalar constant. */
         Vector3& operator *=(float c);
 
+		/** Multiplies each element of this vector by each corresponding 
+		element in the other vector.*/
+		Vector3& operator *=(const Vector3& other);
+
         /** Divides this vector by the given vector */
         Vector3& operator /=(float c);
 
         /** Creates a new Vector that is the negation of this one. */
         Vector3 operator -(void) const;
+
         /** Creates a new vector with the sum of this and the given one.*/
         Vector3 operator +(const Vector3& other) const;
 
@@ -158,8 +131,7 @@ namespace math {
             scalar constant.*/
         Vector3 operator /(float c) const;
 
-        /** Creates a new vector with the product of this vector and the given
-            one.*/
+        /** Creates a new vector with the product of this vector and the given one.*/
         Vector3 operator *(const Vector3& other) const;
 
         /** Test if two vectors are equal */

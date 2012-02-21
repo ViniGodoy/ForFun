@@ -106,8 +106,8 @@ namespace math {
 			Vector2 operator *(float c) const;
 			Vector2 operator /(float c) const;
 
-			float operator[] (long index) const;
-			float& operator[] (long index);
+			const float& operator[] (int index) const;
+			float& operator[] (int index);
 
 			bool operator ==(const Vector2& other) const;
 			bool operator !=(const Vector2& other) const;			

@@ -52,34 +52,7 @@ Vector3& Vector3::set(const float xyz[3])
     return *this;
 }
 
-Vector3& Vector3::addX(float _x)
-{
-    x += _x;
-    return *this;
-}
-
-Vector3& Vector3::addY(float _y)
-{
-    y += _y;
-    return *this;
-}
-
-Vector3& Vector3::addZ(float _z)
-{
-    z += _z;
-    return *this;
-}
-
-Vector3& Vector3::add(float _x, float _y, float _z)
-{
-    x += _x;
-    y += _y;
-    z += _z;
-    return *this;
-}
-
-
-float& Vector3::operator [](long index)
+float& Vector3::operator [](int index)
 {
     switch (index)
     {
@@ -95,7 +68,7 @@ float& Vector3::operator [](long index)
     }
 }
 
-float Vector3::operator [](long index) const
+const float& Vector3::operator [](int index) const
 {
     switch (index)
     {
@@ -113,7 +86,10 @@ float Vector3::operator [](long index) const
 
 Vector3& Vector3::operator +=(const Vector3& other)
 {
-    return add(other.x, other.y, other.z);
+	x += other.x;
+	y += other.y;
+	z += other.z;
+    return *this;
 }
 
 Vector3& Vector3::operator -=(const Vector3& other)
@@ -129,6 +105,14 @@ Vector3& Vector3::operator *=(float c)
     x *= c;
     y *= c;
     z *= c;
+    return *this;
+}
+
+Vector3& Vector3::operator *=(const Vector3& other)
+{
+    x *= other.x;
+    y *= other.y;
+    z *= other.z;
     return *this;
 }
 
@@ -190,6 +174,16 @@ bool Vector3::operator !=(const Vector3& other) const
     return !(*this == other);
 }
 
+float Vector3::sizeSqr() const
+{
+    return x * x + y * y + z * z;
+}
+
+float Vector3::size() const
+{
+    return sqrtf(sizeSqr());
+}
+
 float Vector3::dot(const Vector3& other) const
 {
     return (x * other.x + y * other.y + z * other.z);
@@ -209,15 +203,7 @@ Vector3& Vector3::cross(const Vector3& other)
     return *this;
 }
 
-float Vector3::sizeSqr() const
-{
-    return x * x + y * y + z * z;
-}
 
-float Vector3::size() const
-{
-    return sqrtf(sizeSqr());
-}
 
 Vector3& Vector3::resize(float size)
 {
