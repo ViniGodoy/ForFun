@@ -18,81 +18,84 @@
 * http://creativecommons.org/licenses/by-sa/2.5/br/
 *
 ******************************************************************************/
-#ifndef __AFFINE_TRANSFORM_HPP__
-#define __AFFINE_TRANSFORM_HPP__
+#ifndef __TRANSFORM_2D_HPP__
+#define __TRANSFORM_2D_HPP__
 
+#include "Vector3.hpp"
 #include "Vector2.hpp"
 #include "Matrix3.hpp"
 
 namespace fun {
 namespace math {
 	namespace rh {
-		Vector2 transform(const Matrix3 matrix, Vector2& vector, float z=1.0f);
+		Vector3 transform2d(const Matrix3 matrix, Vector3& vector);
+		Vector2 transform2d(const Matrix3 matrix, Vector2& vector, float z=1.0f);
 
 		/**
 		* Creates a 2D right hand counter-clockwise rotation affine 
 		* transformation
 		*/
-		Matrix3 newAffineRotation(float radians);
+		Matrix3 newRotation2d(float radians);
 
 
 		/**
 		* Creates a 2D right hand scale affine transformation
 		*/
-		Matrix3 newAffineScale(float scalex, float scaley);
+		Matrix3 newScale2d(float scalex, float scaley);
 
 		/**
 		* Creates a 2D right hand scale affine transformation
 		*/
-		inline Matrix3 newAffineScale(float scale) 
+		inline Matrix3 newScale2d(float scale) 
 		{
-			return newAffineScale(scale, scale);
+			return newScale2d(scale, scale);
 		}
 
 		/**
 		* Creates a 2D right hand scale affine transformation
 		*/
-		Matrix3 newAffineTranslation(float x, float y);
+		Matrix3 newTranslation2d(float x, float y);
 
-		inline Matrix3 newAffineTranslation(const Vector2& pos)
+		inline Matrix3 newTranslation2d(const Vector2& pos)
 		{
-			return newAffineTranslation(pos.x, pos.y);
+			return newTranslation2d(pos.x, pos.y);
 		}
 	}
 
 	namespace lh
 	{
-		Vector2 transform(const Matrix3 matrix, Vector2& vector, float z=1.0f);
+		Vector3 transform2d(const Matrix3 matrix, Vector3& vector);
+		Vector2 transform2d(const Matrix3 matrix, Vector2& vector, float z=1.0f);
 
 		/**
 		* Creates a 2D left hand clockwise rotation affine transformation
 		*/
-		Matrix3 newAffineRotation(float radians);
+		Matrix3 newRotation2d(float radians);
 
 		/**
 		* Creates a 2D left hand scale affine transformation
 		*/
-		inline Matrix3 newAffineScale(float scalex, float scaley)
+		inline Matrix3 newScale2d(float scalex, float scaley)
 		{
-			return rh::newAffineScale(scalex, scaley);
+			return rh::newScale2d(scalex, scaley);
 		}
 
 		/**
 		* Creates a 2D left hand scale affine transformation
 		*/
-		inline Matrix3 newAffineScale(float scale)
+		inline Matrix3 newScale2d(float scale)
 		{
-			return rh::newAffineScale(scale, scale);
+			return rh::newScale2d(scale, scale);
 		}
 
 		/**
 		* Creates a 2D left hand scale affine transformation
 		*/
-		Matrix3 newAffineTranslation(float x, float y);
+		Matrix3 newTranslation2d(float x, float y);
 
-		inline Matrix3 newAffineTranslation(const Vector2& pos)
+		inline Matrix3 newTranslation2d(const Vector2& pos)
 		{
-			return lh::newAffineTranslation(pos.x, pos.y);
+			return lh::newTranslation2d(pos.x, pos.y);
 		}
 	}
 }}
