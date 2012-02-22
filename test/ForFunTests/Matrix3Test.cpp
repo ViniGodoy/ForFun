@@ -1,7 +1,7 @@
 #include "Matrix3Test.hpp"
 
 #include "assert.hpp"
-#include <Math/AffineTransform.hpp>
+#include <Math/Transform2D.hpp>
 #include <Math/Matrix3.hpp>
 
 Matrix3 matrix1();
@@ -234,23 +234,23 @@ void testAffineTransform()
 	assertEquals(__LINE__,
 		2.0f, 0.0f, 0.0f,
 		0.0f, 2.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, lh::newAffineScale(2));
+		0.0f, 0.0f, 1.0f, lh::newScale2d(2));
 
 	assertEquals(__LINE__,
 		2.0f, 0.0f, 0.0f,
 		0.0f, 2.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, rh::newAffineScale(2));
+		0.0f, 0.0f, 1.0f, rh::newScale2d(2));
 
 
 	assertEquals(__LINE__,
 		2.0f, 0.0f, 0.0f,
 		0.0f, 3.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, lh::newAffineScale(2,3));
+		0.0f, 0.0f, 1.0f, lh::newScale2d(2,3));
 
 	assertEquals(__LINE__,
 		2.0f, 0.0f, 0.0f,
 		0.0f, 3.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, rh::newAffineScale(2,3));
+		0.0f, 0.0f, 1.0f, rh::newScale2d(2,3));
 
 
 	float angle = toRadians(30);
@@ -260,40 +260,40 @@ void testAffineTransform()
 	assertEquals(__LINE__,
 		cosa, -sina, 0.0f,
 	    sina,  cosa, 0.0f,
-		0.0f,  0.0f, 1.0f, lh::newAffineRotation(angle));
+		0.0f,  0.0f, 1.0f, lh::newRotation2d(angle));
 
 	assertEquals(__LINE__,
 		cosa,  sina, 0.0f,
 	    -sina, cosa, 0.0f,
-		0.0f,  0.0f, 1.0f, rh::newAffineRotation(angle));
+		0.0f,  0.0f, 1.0f, rh::newRotation2d(angle));
 
 	assertEquals(__LINE__,
 		1.0f, 0.0f, 2.0f,
 		0.0f, 1.0f, 3.0f,
-		0.0f, 0.0f, 1.0f, rh::newAffineTranslation(2, 3));
+		0.0f, 0.0f, 1.0f, rh::newTranslation2d(2, 3));
 
 	assertEquals(__LINE__,
 		1.0f, 0.0f, 2.0f,
 		0.0f, 1.0f, 3.0f,
-		0.0f, 0.0f, 1.0f, rh::newAffineTranslation(Vector2(2, 3)));
+		0.0f, 0.0f, 1.0f, rh::newTranslation2d(Vector2(2, 3)));
 
 	assertEquals(__LINE__,
 		1.0f, 0.0f, 0.0f,
 		0.0f, 1.0f, 0.0f,
-		2.0f, 3.0f, 1.0f, lh::newAffineTranslation(2, 3));
+		2.0f, 3.0f, 1.0f, lh::newTranslation2d(2, 3));
 
 	assertEquals(__LINE__,
 		1.0f, 0.0f, 0.0f,
 		0.0f, 1.0f, 0.0f,
-		2.0f, 3.0f, 1.0f, lh::newAffineTranslation(Vector2(2, 3)));
+		2.0f, 3.0f, 1.0f, lh::newTranslation2d(Vector2(2, 3)));
 
 	Vector2 v(2,3);
 	Vector2 rot = rotate(v, 30);
-	Matrix3 rotMatrix = lh::newAffineRotation(30);
-	assertTrue(__LINE__, rot == lh::transform(rotMatrix, v, 1.0f));
+	Matrix3 rotMatrix = lh::newRotation2d(30);
+	assertTrue(__LINE__, rot == lh::transform2d(rotMatrix, v, 1.0f));
 
 	v.set(2,3);
 	rot = rotate(v, -30);
-	rotMatrix = rh::newAffineRotation(30);
-	assertTrue(__LINE__, rot == rh::transform(rotMatrix, v, 1.0f));
+	rotMatrix = rh::newRotation2d(30);
+	assertTrue(__LINE__, rot == rh::transform2d(rotMatrix, v, 1.0f));
 }
