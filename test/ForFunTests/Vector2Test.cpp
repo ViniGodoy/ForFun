@@ -5,7 +5,7 @@
 
 void testVector2()
 {
-	cout << "Testing Vector2 class..." << endl;
+	reportTesting("Vector2 class");
 
 	//Constructor test
 	Vector2 v1;

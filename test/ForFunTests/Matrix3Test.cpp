@@ -25,7 +25,7 @@ Matrix3 matrix2()
 
 void testMatrix3()
 {
-	cout << "Testing Matrix3 class..." << endl;
+	reportTesting("Matrix3 class");	
 
 	Matrix3 matrix3d = Matrix3(
 		1.0f, 2.0f, 3.0f,
@@ -230,6 +230,7 @@ void testMatrix3()
 
 void testAffineTransform2d()
 {
+	reportTesting("2D transformations");
 	//Affine Transformation tests
 	assertEquals(__LINE__,
 		2.0f, 0.0f, 0.0f,

@@ -45,7 +45,7 @@ Matrix4 matrix4Inverse()
 
 void testMatrix4()
 {
-	cout << "Testing Matrix4 class..." << endl;
+	reportTesting("Matrix4 class...");
 
 	assertEquals(__LINE__, 
 		1.0f, 2.0f, 3.0f, 4.0f, 

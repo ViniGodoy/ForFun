@@ -5,6 +5,11 @@ void reportMissing(const std::string& what)
 	cout << "****** MISSING tests for " << what << "! ******" << endl;
 }
 
+void reportTesting(const std::string& what)
+{
+	cout << "Testing " << what << "..." << endl;
+}
+
 void assertTrue(int line, bool value)
 {
 	if (!value) {
