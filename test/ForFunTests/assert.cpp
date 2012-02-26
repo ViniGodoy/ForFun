@@ -20,15 +20,23 @@ void assertEquals(int line, float desired, float value, float delta)
 
 void assertEquals(int line, float x, float y, const Vector2& vector, float delta)
 {
-	assertEquals(line, x, vector.x, delta);
-	assertEquals(line, y, vector.y, delta);	
+	assertEquals(line, x, vector[X], delta);
+	assertEquals(line, y, vector[Y], delta);	
 }
 
 void assertEquals(int line, float x, float y, float z, const Vector3& vector, float delta)
 {
-	assertEquals(line, x, vector.x, delta);
-	assertEquals(line, y, vector.y, delta);	
-	assertEquals(line, z, vector.z, delta);	
+	assertEquals(line, x, vector[X], delta);
+	assertEquals(line, y, vector[Y], delta);	
+	assertEquals(line, z, vector[Z], delta);
+}
+
+void assertEquals(int line, float x, float y, float z, float w, const Vector4& vector, float delta)
+{
+	assertEquals(line, x, vector[X], delta);
+	assertEquals(line, y, vector[Y], delta);	
+	assertEquals(line, z, vector[Z], delta);
+	assertEquals(line, w, vector[W], delta);
 }
 
 void assertEquals(int line, 

@@ -79,6 +79,7 @@
     <ClCompile Include="Matrix4.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector3.cpp" />
+    <ClCompile Include="Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Transform2D.hpp" />
@@ -87,6 +88,7 @@
     <ClInclude Include="Matrix4.hpp" />
     <ClInclude Include="Vector2.hpp" />
     <ClInclude Include="Vector3.hpp" />
+    <ClInclude Include="Vector4.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

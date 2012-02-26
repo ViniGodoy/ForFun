@@ -5,6 +5,8 @@
 
 #include "math/Vector2.hpp"
 #include "math/Vector3.hpp"
+#include "math/Vector4.hpp"
+
 #include "math/Matrix3.hpp"
 #include "math/Matrix4.hpp"
 
@@ -17,6 +19,7 @@ void assertTrue(int line, bool value);
 void assertEquals(int line, float desired, float value, float delta=FLOAT_DELTA);
 void assertEquals(int line, float x, float y, const Vector2& vector, float delta=FLOAT_DELTA);
 void assertEquals(int line, float x, float y, float z, const Vector3& vector, float delta=FLOAT_DELTA);
+void assertEquals(int line, float x, float y, float z, float w, const Vector4& vector, float delta=FLOAT_DELTA);
 
 void assertEquals(int line, 
 	float a, float b, float c, 

@@ -39,10 +39,9 @@ namespace math {
 	*/
 	class Vector2
 	{
+		float v[2];
+
 		public:
-			float x;
-			float y;
-			
 			/** Builds a NULL vector */
 			Vector2();
 			/** Builds a vector based in it's x and y components */
@@ -57,9 +56,6 @@ namespace math {
 
 			/** Changes the x and y values */
 			Vector2& set(float x, float y);
-
-			/** Changes the x and y values */
-			Vector2& set(const Vector2& other);
 
 			/** Changes the x and y values */
 			Vector2& set(const float xy[2]);
@@ -106,8 +102,8 @@ namespace math {
 			Vector2 operator *(float c) const;
 			Vector2 operator /(float c) const;
 
-			const float& operator[] (int index) const;
-			float& operator[] (int index);
+			inline const float& operator[] (int index) const { return v[index]; }
+			inline float& operator[] (int index) { return v[index]; }
 
 			bool operator ==(const Vector2& other) const;
 			bool operator !=(const Vector2& other) const;			
@@ -126,107 +122,112 @@ namespace math {
 			/**
 			* Returns true if it's the zero vector (size == 0)
 			*/
-			inline bool isZero() const { return equals(x, 0) && equals(y, 0); }
+			bool isZero() const;
 
 			/**
 			* Returns true if it's a unit vector (size == 1)
 			*/
 			inline bool isUnit() const { return equals(size(), 1); }
+
+			/**
+			 * Return his vector dimension, 2
+			 */
+			inline int dim() const { return 2; }
 	};
 
 	Vector2 operator*(float scalar, const Vector2& vector);
 
 	/**
-		* @return the squared distance between two vectors
-		* @see distance
-		*/
+	* @return the squared distance between two vectors
+	* @see distance
+	*/
 	inline float distanceSqr(const Vector2& p1, const Vector2& p2)
 	{
 		return (p1 - p2).sizeSqr();
 	}
 
 	/**
-		* @return the distance between two vectors
-		* @see distanceSqr
-		*/
+	* @return the distance between two vectors
+	* @see distanceSqr
+	*/
 	inline float distance(const Vector2& p1, const Vector2& p2)
 	{
 		return (p1 - p2).size();
 	}
 	
 	/**
-		* Test if two vectors are orthogonal to each other.
-		* Two vector are orthogonal if the angle between than is 90º or if any 
-		* them is the zero vector.
-		* @return True if they are orthogonal.
-		*/
+	* Test if two vectors are orthogonal to each other.
+	* Two vector are orthogonal if the angle between than is 90º or if any 
+	* them is the zero vector.
+	* @return True if they are orthogonal.
+	*/
 	inline bool areOrthogonal(const Vector2& a, const Vector2& b)
 	{
 		return equals(a.dot(b), 0);
 	}
 
 	/**
-		* @return the counter-clockwise perpenticular copy of vector of v. 
-		*/
+	* @return the counter-clockwise perpenticular copy of vector of v. 
+	*/
 	inline Vector2 perp(const Vector2& v)
 	{
-		return Vector2(-v.y, v.x);
+		return Vector2(-v[Y], v[X]);
 	}
 
 	/**
-		* @return the dot product between the perpendicular of a and the vector b.
-		* @see perp(const Vector2&)
-		*/
+	* @return the dot product between the perpendicular of a and the vector b.
+	* @see perp(const Vector2&)
+	*/
 	inline float perpDot(const Vector2& a, const Vector2& b)
 	{
 		return perp(a).dot(b);
 	}
 
 	/**
-		* Returns a clockwise direction rotated copy of v.
-		* @param v The vector to rotate
-		* @param radians The angle, in radians.
-		* @return A rotated copy of v.
-		*/
+	* Returns a clockwise direction rotated copy of v.
+	* @param v The vector to rotate
+	* @param radians The angle, in radians.
+	* @return A rotated copy of v.
+	*/
 	inline Vector2 rotate(const Vector2& v, float radians)
 	{
 		return Vector2(v).rotate(radians);
 	}
 
 	/**
-		* @return a resized copy of v.
-		*/
+	* @return a resized copy of v.
+	*/
 	inline Vector2 resize(const Vector2& v, float size)
 	{
 		return Vector2(v).resize(size);
 	}
 
 	/**
-		* @param v A vector
-		* @param size Maximum size of the returning vector
-		* 
-		* @return If the size if v is greater than size, returns
-		* a resized version of v with the specified size. Otherwise
-		* just return a copy of v.
-		*/
+	* @param v A vector
+	* @param size Maximum size of the returning vector
+	* 
+	* @return If the size if v is greater than size, returns
+	* a resized version of v with the specified size. Otherwise
+	* just return a copy of v.
+	*/
 	inline Vector2 truncate(const math::Vector2& v, float size)
 	{					
 		return (v.sizeSqr() > size * size) ? resize(v, size) : v;
 	}
 
 	/**
-		* @return a normalized copy of the given vector
-		*/
+	* @return a normalized copy of the given vector
+	*/
 	inline Vector2 normalize(const Vector2& v) 
 	{ 
 		return Vector2(v).normalize(); 
 	}
 
 	/**
-		* @param ray The ray to reflect
-		* @param normal Surface normal
-		* @return The reflection vector
-		*/
+	* @param ray The ray to reflect
+	* @param normal Surface normal
+	* @return The reflection vector
+	*/
 	inline Vector2 reflect(const Vector2& ray, const Vector2& normal) 
 	{
 		return ray - 2 * ray.dot(normal) * normal;

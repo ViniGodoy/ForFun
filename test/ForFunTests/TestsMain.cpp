@@ -21,6 +21,7 @@
 #include <iostream>
 #include "Vector2Test.hpp"
 #include "Vector3Test.hpp"
+#include "Vector4Test.hpp"
 #include "Matrix3Test.hpp"
 #include "Matrix4Test.hpp"
 
@@ -28,6 +29,7 @@ int main(int argc, char* argv[])
 {	
 	testVector2();
 	testVector3();	
+	testVector4();
 	testMatrix3();
 	testMatrix4();
 	testAffineTransform();

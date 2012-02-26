@@ -42,9 +42,6 @@ void testVector2()
 	v1.set(xy);
 	assertEquals(__LINE__, 0.5f, 0.3f, v1);	
 
-	v1.set(Vector2(0.3f, 0.5f));
-	assertEquals(__LINE__, 0.3f, 0.5f, v1);		
-
 	v1.set(0.3f, 0.5f);
 	assertEquals(__LINE__, 0.3f, v1[0]);
 	assertEquals(__LINE__, 0.5f, v1[1]);

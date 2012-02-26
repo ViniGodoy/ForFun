@@ -27,51 +27,47 @@
 
 using namespace fun::math;
 
-Vector2::Vector2() : x(0), y(0)
-{
+Vector2::Vector2()
+{	
+	for (int i = 0; i < dim(); ++i)
+		v[i] = 0.0f;
 }
 
-Vector2::Vector2(float _x, float _y) : x(_x), y(_y)
+Vector2::Vector2(float _x, float _y)
 {
+	v[X] = _x;
+	v[Y] = _y;
 }
 
-Vector2::Vector2(float xy[2]) : x(xy[0]), y(xy[1])
+Vector2::Vector2(float xy[2]) 
 {
+	memcpy(v, xy, sizeof(v));
 }
 
 Vector2 Vector2::newBySizeAngle(float size, float radians)
 {
-    return Vector2(cos(radians) * size,
-                    sin(radians) * size);
+    return Vector2(cos(radians) * size, sin(radians) * size);
 }
 
 Vector2& Vector2::set(float _x, float _y)
-{
-	x = _x;
-	y = _y;
+{	
+	v[X] = _x;
+	v[Y] = _y;
 	return *this;
 }
 
 Vector2& Vector2::set(const float xy[2])
 {
-    x = xy[0];
-    y = xy[1];
-    return *this;
-}
-
-Vector2& Vector2::set(const Vector2& other)
-{
-    if (&other == this)
-        return *this;
-
-    x = other.x;
-    y = other.y;
+	memcpy(v, xy, sizeof(v));
     return *this;
 }
 
 float Vector2::sizeSqr() const
 {
-	return x * x + y * y;
+	float sizeSqr = 0;
+	for (int i = 0; i < dim(); ++i)
+		sizeSqr += v[i] * v[i];
+	return sizeSqr;
 }
 
 float Vector2::size() const
@@ -81,7 +77,7 @@ float Vector2::size() const
 
 float Vector2::angle() const
 {
-	return atan2f(y,x);
+	return atan2f(v[Y],v[X]);
 }
 
 Vector2& Vector2::rotate(float radians) 
@@ -89,11 +85,11 @@ Vector2& Vector2::rotate(float radians)
 	float s = sin(radians);
     float c = cos(radians);
 
-    float newX = x * c - y * s;
-    float newY = x * s + y * c;
+    float newX = v[X] * c - v[Y] * s;
+    float newY = v[X] * s + v[Y] * c;
 
-    x = newX;
-    y = newY;
+    v[X] = newX;
+    v[Y] = newY;
 
     return *this;
 }
@@ -109,76 +105,50 @@ Vector2& Vector2::resize(float size)
 	return normalize() *= size;
 }
 
-const float& Vector2::operator[] (int index) const
-{
-    if (index == 0)
-        return x;
-    if (index == 1)
-        return y;
-
-    std::stringstream ss;
-    ss << "Index out of bounds: " << index << " size: 2";
-    throw std::out_of_range(ss.str());
-}
-
-float& Vector2::operator[] (int index)
-{
-    if (index == 0)
-        return x;
-    if (index == 1)
-        return y;
-
-    std::stringstream ss;
-    ss << "Index out of bounds: " << index << " size: 2";
-    throw std::out_of_range(ss.str());
-}
-
 Vector2& Vector2::operator += (const Vector2& other)
 {
-	x += other.x;
-    y += other.y;
+	for (int i = 0; i < dim(); ++i) 
+		v[i] += other[i];
     return *this;
 }
 
 Vector2& Vector2::operator -= (const Vector2& other)
 {
-	x -= other.x;
-	y -= other.y;
+	for (int i = 0; i < dim(); ++i) 
+		v[i] -= other[i];
 	return *this;
 }
 
 Vector2& Vector2::operator *= (float c)
 {
-	x *= c;
-	y *= c;
+	for (int i = 0; i < dim(); ++i) 
+		v[i] *= c;
 	return *this;
 }
 
 Vector2& Vector2::operator /= (float c)
-{
-	x /= c;
-    y /= c;
-    return *this;
+{	
+    return *this *= (1.0f / c);
 }
 
 Vector2 Vector2::operator -(void) const
 {
-	return Vector2(-x, -y);
+	return Vector2(-v[X], -v[Y]);
 }
 
 Vector2 Vector2::operator +(const Vector2& other) const
 {
-	return Vector2(x + other.x, y + other.y);
+	return Vector2(*this) += other;
 }
 
 Vector2 Vector2::operator -(const Vector2& other) const
 {
-	return Vector2(x - other.x, y - other.y);
+	return Vector2(*this) -= other;
 }
 
 Vector2 Vector2::operator *(float c) const
 {
-	return Vector2(x*c, y*c);
+	return Vector2(*this) *= c;
 }
 
 Vector2 fun::math::operator*(float scalar, const Vector2& vector)
@@ -188,22 +158,28 @@ Vector2 fun::math::operator*(float scalar, const Vector2& vector)
 
 Vector2 Vector2::operator /(float c) const
 {
-	return Vector2(x/c, y/c);
+	return Vector2(*this) /= c;
 }
 
 bool Vector2::operator ==(const Vector2& other) const
 {
-	return equals(x, other.x) && equals(y, other.y);	
+	for (int i = 0; i < dim(); ++i)
+		if (!equals(v[i], other[i]))
+			return false;
+	return true;	
 }
 
 bool Vector2::operator !=(const Vector2& other) const
 {
-	return !(*this == other);	
+	return !(*this == other);
 }
 
 float Vector2::dot(const Vector2& other) const
 {
-    return x * other.x + y * other.y;
+	float dotResult = 0.0f;
+	for (int i = 0; i < dim(); ++i)
+		dotResult += v[i] * other[i];    
+	return dotResult;
 }
 
 float Vector2::relativeAngleBetween(const Vector2 v2) const
@@ -211,8 +187,15 @@ float Vector2::relativeAngleBetween(const Vector2 v2) const
 	return angle() - v2.angle();
 }
 
+bool Vector2::isZero() const
+{
+	for (int i = 0; i < dim(); ++i)
+		if (!equals(v[i], 0))
+			return false;
+	return true;
+}
+
 std::ostream& fun::math::operator<<(std::ostream& output, const Vector2& p)
 {
-	output << "(" << p.x << "," << p.y << ")";
-	return output;
+	return output << "(" << p[X] << "," << p[Y] << ")";
 }

@@ -27,121 +27,89 @@
 
 using namespace fun::math;
 
-Vector3::Vector3() : x(0), y(0), z(0) {}
+Vector3::Vector3() 
+{
+	for (int i = 0; i < dim(); ++i)
+		v[i] = 0.0f;
+}
 
-Vector3::Vector3(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
+Vector3::Vector3(float _x, float _y, float _z) 
+{
+	v[X] = _x;
+	v[Y] = _y;
+	v[Z] = _z;
+}
 
 Vector3::Vector3(float xyz[3])
-: x(xyz[0]), y(xyz[1]), z(xyz[2])
 {
+	memcpy(v, xyz, sizeof(v));
 }
 
 Vector3& Vector3::set(float _x, float _y, float _z)
 {
-    x = _x;
-    y = _y;
-    z = _z;
+	v[X] = _x;
+	v[Y] = _y;
+	v[Z] = _z;
     return *this;
 }
 
 Vector3& Vector3::set(const float xyz[3])
 {
-    x = xyz[0];
-    y = xyz[1];
-    z = xyz[2];
+	memcpy(v, xyz, sizeof(v));
     return *this;
-}
-
-float& Vector3::operator [](int index)
-{
-    switch (index)
-    {
-        case 0: return x;
-        case 1: return y;
-        case 2: return z;
-        default:
-        {
-            std::stringstream ss;
-            ss << "Index out of bounds: " << index << " size: 3";
-            throw std::out_of_range(ss.str());
-        }
-    }
-}
-
-const float& Vector3::operator [](int index) const
-{
-    switch (index)
-    {
-        case 0: return x;
-        case 1: return y;
-        case 2: return z;
-        default:
-        {
-            std::stringstream ss;
-            ss << "Index out of bounds: " << index << " size: 3";
-            throw std::out_of_range(ss.str());
-        }
-    }
 }
 
 Vector3& Vector3::operator +=(const Vector3& other)
 {
-	x += other.x;
-	y += other.y;
-	z += other.z;
+	for (int i = 0; i < dim(); ++i) 
+		v[i] += other[i];
     return *this;
 }
 
 Vector3& Vector3::operator -=(const Vector3& other)
 {
-    x -= other.x;
-    y -= other.y;
-    z -= other.z;
-    return (*this);
+	for (int i = 0; i < dim(); ++i) 
+		v[i] -= other[i];
+    return *this;
 }
 
 Vector3& Vector3::operator *=(float c)
 {
-    x *= c;
-    y *= c;
-    z *= c;
+	for (int i = 0; i < dim(); ++i) 
+		v[i] *= c;
     return *this;
 }
 
 Vector3& Vector3::operator *=(const Vector3& other)
 {
-    x *= other.x;
-    y *= other.y;
-    z *= other.z;
+	for (int i = 0; i < dim(); ++i) 
+		v[i] *= other[i];
     return *this;
 }
 
 Vector3& Vector3::operator /=(float c)
 {
-    x /= c;
-    y /= c;
-    z /= c;
-    return *this;
+    return *this *= (1.0f / c);
 }
 
 Vector3 Vector3::operator -(void) const
 {
-    return (Vector3(-x, -y, -z));
+    return (Vector3(-v[X], -v[Y], -v[Z]));
 }
 
 Vector3 Vector3::operator +(const Vector3& other) const
 {
-    return (Vector3(x + other.x, y + other.y, z + other.z));
+    return Vector3(*this) += other;
 }
 
 Vector3 Vector3::operator -(const Vector3& other) const
 {
-    return (Vector3(x - other.x, y - other.y, z - other.z));
+    return Vector3(*this) -= other;
 }
 
 Vector3 Vector3::operator *(float c) const
 {
-    return (Vector3(x * c, y * c, z * c));
+    return Vector3(*this) *= c;
 }
 
 Vector3 fun::math::operator * (float scalar, const Vector3& vector)
@@ -151,22 +119,20 @@ Vector3 fun::math::operator * (float scalar, const Vector3& vector)
 
 Vector3 Vector3::operator /(float t) const
 {
-    float f = 1.0F / t;
-    return (Vector3(x * f, y * f, z * f));
+    return Vector3(*this) /= t;
 }
 
 Vector3 Vector3::operator *(const Vector3& other) const
 {
-    return (Vector3(x * other.x,
-                     y * other.y,
-                     z * other.z));
+    return Vector3(*this) *= other;
 }
 
 bool Vector3::operator ==(const Vector3& other) const
 {
-	return equals(x, other.x) &&
-		   equals(y, other.y) &&
-		   equals(z, other.z);
+	for (int i = 0; i < dim(); ++i)
+		if (!equals(v[i], other[i]))
+			return false;
+	return true;
 }
 
 bool Vector3::operator !=(const Vector3& other) const
@@ -176,7 +142,10 @@ bool Vector3::operator !=(const Vector3& other) const
 
 float Vector3::sizeSqr() const
 {
-    return x * x + y * y + z * z;
+	float sizeSqrResult = 0;
+	for (int i = 0; i < dim(); ++i)
+		sizeSqrResult += v[i] * v[i];
+	return sizeSqrResult;
 }
 
 float Vector3::size() const
@@ -186,19 +155,30 @@ float Vector3::size() const
 
 float Vector3::dot(const Vector3& other) const
 {
-    return (x * other.x + y * other.y + z * other.z);
+	float dotResult = 0.0f;
+	for (int i = 0; i < dim(); ++i)
+		dotResult += v[i] * other[i];
+	return dotResult;
+}
+
+bool Vector3::isZero() const
+{
+	for (int i = 0; i < dim(); ++i)
+		if (!equals(v[i], 0))
+			return false;
+	return true;
 }
 
 Vector3& Vector3::cross(const Vector3& other)
 {
-    float nx, ny;
+    float newX, newY;
 
-    nx = y * other.z - z * other.y;
-    ny = z * other.x - x * other.z;
-    z = x * other.y - y * other.x;
+    newX = v[Y] * other[Z] - v[Z] * other[Y];
+    newY = v[Z] * other[X] - v[X] * other[Z];
+    v[Z] = v[X] * other[Y] - v[Y] * other[X];
 
-    x = nx;
-    y = ny;
+    v[X] = newX;
+    v[Y] = newY;
 
     return *this;
 }
@@ -214,44 +194,16 @@ Vector3& Vector3::normalize()
 	return (s == 0) ? *this : (*this /= sqrtf(s));
 }
 
-Vector3& Vector3::rotateX(float angle)
+Vector3& Vector3::rotateTwoAxis(int a0, int a1, float radians)
 {
-    float s = sinf(angle);
-    float c = cosf(angle);
+    float s = sinf(radians);
+    float c = cosf(radians);
 
-    float ny = c * y - s * z;
-    float nz = c * z + s * y;
+    float ny = c * v[a0] - s * v[a1];
+    float nz = c * v[a1] + s * v[a0];
 
-    y = ny;
-    z = nz;
-
-    return (*this);
-}
-
-Vector3& Vector3::rotateY(float angle)
-{
-    float s = sinf(angle);
-    float c = cosf(angle);
-
-    float nx = c * x + s * z;
-    float nz = c * z - s * x;
-
-    x = nx;
-    z = nz;
-
-    return (*this);
-}
-
-Vector3& Vector3::rotateZ(float angle)
-{
-    float s = sinf(angle);
-    float c = cosf(angle);
-
-    float nx = c * x - s * y;
-    float ny = c * y + s * x;
-
-    x = nx;
-    y = ny;
+    v[a0] = ny;
+    v[a1] = nz;
 
     return (*this);
 }
@@ -262,27 +214,26 @@ Vector3& Vector3::rotateAxis(float angle, const Vector3& axis)
     float c = cosf(angle);
     float k = 1.0F - c;
 
-    float nx = x * (c + k * axis.x * axis.x) +
-               y * (k * axis.x * axis.y - s * axis.z) +
-               z * (k * axis.x * axis.z + s * axis.y);
+    float nx = v[X] * (c + k * axis[X] * axis[X]) +
+               v[Y] * (k * axis[X] * axis[Y] - s * axis[Z]) +
+               v[Z] * (k * axis[X] * axis[Z] + s * axis[Y]);
 
-    float ny = x * (k * axis.x * axis.y + s * axis.z) +
-               y * (c + k * axis.y * axis.y) +
-               z * (k * axis.y * axis.z - s * axis.x);
+    float ny = v[X] * (k * axis[X] * axis[Y] + s * axis[Z]) +
+               v[Y] * (c + k * axis[Y] * axis[Y]) +
+               v[Z] * (k * axis[Y] * axis[Z] - s * axis[X]);
 
-    float nz = x * (k * axis.x * axis.z - s * axis.y) +
-               y * (k * axis.y * axis.z + s * axis.x) +
-               z * (c + k * axis.z * axis.z);
+    float nz = v[X] * (k * axis[X] * axis[Z] - s * axis[Y]) +
+               v[Y] * (k * axis[Y] * axis[Z] + s * axis[X]) +
+               v[Z] * (c + k * axis[Z] * axis[Z]);
 
-    x = nx;
-    y = ny;
-    z = nz;
+    v[X] = nx;
+    v[Y] = ny;
+    v[Z] = nz;
 
     return *this;
 }
 
 std::ostream& fun::math::operator<<(std::ostream& output, const Vector3& p)
 {
-	output << "(" << p.x << "," << p.y << "," << p.z << ")";
-	return output;	
+	return output << "(" << p[X] << "," << p[Y] << "," << p[Z] << ")";	
 }

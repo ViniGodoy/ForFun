@@ -112,14 +112,14 @@ void testVector3()
 	v1 = Vector3(10.0f, 20.f, 30.0f);
 	v2 = Vector3(v1);
 	assertTrue(__LINE__, v1 == v2);
-	v2.x = 1.0f;
+	v2[X] = 1.0f;
 	assertTrue(__LINE__, !(v1 == v2));
 
 	//Operator !=
 	v1 = Vector3(10.0f, 20.f, 30.0f);
 	v2 = Vector3(v1);
 	assertTrue(__LINE__, !(v1 != v2));
-	v2.x = 1.0f;
+	v2[X] = 1.0f;
 	assertTrue(__LINE__, v1 != v2);
 
 	//Methods
