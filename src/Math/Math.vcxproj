@@ -77,6 +77,7 @@
     <ClCompile Include="Transform2D.cpp" />
     <ClCompile Include="Matrix3.cpp" />
     <ClCompile Include="Matrix4.cpp" />
+    <ClCompile Include="Transform3D.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Vector4.cpp" />
@@ -86,6 +87,7 @@
     <ClInclude Include="MathUtil.hpp" />
     <ClInclude Include="Matrix3.hpp" />
     <ClInclude Include="Matrix4.hpp" />
+    <ClInclude Include="Transform3D.hpp" />
     <ClInclude Include="Vector2.hpp" />
     <ClInclude Include="Vector3.hpp" />
     <ClInclude Include="Vector4.hpp" />

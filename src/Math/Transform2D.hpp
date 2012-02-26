@@ -28,8 +28,8 @@
 namespace fun {
 namespace math {
 	namespace rh {
-		Vector3 transform2d(const Matrix3 matrix, Vector3& vector);
-		Vector2 transform2d(const Matrix3 matrix, Vector2& vector, float z=1.0f);
+		Vector3 transform2d(const Matrix3& matrix, Vector3& vector);
+		Vector2 transform2d(const Matrix3& matrix, Vector2& vector, float z=1.0f);
 
 		/**
 		* Creates a 2D right hand counter-clockwise rotation affine 
@@ -64,8 +64,8 @@ namespace math {
 
 	namespace lh
 	{
-		Vector3 transform2d(const Matrix3 matrix, Vector3& vector);
-		Vector2 transform2d(const Matrix3 matrix, Vector2& vector, float z=1.0f);
+		Vector3 transform2d(const Matrix3& matrix, Vector3& vector);
+		Vector2 transform2d(const Matrix3& matrix, Vector2& vector, float z=1.0f);
 
 		/**
 		* Creates a 2D left hand clockwise rotation affine transformation
