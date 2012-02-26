@@ -237,3 +237,8 @@ void testMatrix4()
 	assertEquals(__LINE__, matrix4WithInverse(), matrix);
 	assertEquals(__LINE__, matrix4Inverse(), other);
 }
+
+void testAffineTransform3d()
+{
+	reportMissing("3D transformations");
+}

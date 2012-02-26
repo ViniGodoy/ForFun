@@ -228,7 +228,7 @@ void testMatrix3()
 		-1.0f, 0.0f,  3.0f, other);
 }
 
-void testAffineTransform()
+void testAffineTransform2d()
 {
 	//Affine Transformation tests
 	assertEquals(__LINE__,

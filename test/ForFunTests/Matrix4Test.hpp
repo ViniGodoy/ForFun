@@ -3,5 +3,6 @@
 
 //Test method
 void testMatrix4();
+void testAffineTransform3d();
 
 #endif

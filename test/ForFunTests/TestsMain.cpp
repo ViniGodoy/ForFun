@@ -31,8 +31,11 @@ int main(int argc, char* argv[])
 	testVector3();	
 	testVector4();
 	testMatrix3();
+	testAffineTransform2d();
+
 	testMatrix4();
-	testAffineTransform();
+	testAffineTransform3d();
+	
 	std::cout << "All tests passed!" << std::endl;
 	system("pause");
 }

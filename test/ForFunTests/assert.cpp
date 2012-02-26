@@ -1,5 +1,10 @@
 #include "assert.hpp"
 
+void reportMissing(const std::string& what)
+{
+	cout << "****** MISSING tests for " << what << "! ******" << endl;
+}
+
 void assertTrue(int line, bool value)
 {
 	if (!value) {

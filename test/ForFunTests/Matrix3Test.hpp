@@ -2,6 +2,6 @@
 #define __MATRIX3_TEST_HPP__
 
 void testMatrix3();
-void testAffineTransform();
+void testAffineTransform2d();
 
 #endif

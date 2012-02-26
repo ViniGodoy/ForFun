@@ -2,6 +2,7 @@
 #define __ASSERT_HPP__
 
 #include <iostream>
+#include <string>
 
 #include "math/Vector2.hpp"
 #include "math/Vector3.hpp"
@@ -15,6 +16,7 @@ using namespace std;
 using namespace fun::math;
 using namespace std;
 
+void reportMissing(const std::string& what);
 void assertTrue(int line, bool value);
 void assertEquals(int line, float desired, float value, float delta=FLOAT_DELTA);
 void assertEquals(int line, float x, float y, const Vector2& vector, float delta=FLOAT_DELTA);
