@@ -13,7 +13,7 @@ The code may use C++11 code, such as lambda. Portability is NOT a goal.
 
 History
 ---------
-26/02/2012 - Added Vector4, some 3D transforms and encapsulated vector fields.
+26/02/2012 - Added Vector4, 3D transforms and encapsulated vector fields.
 22/02/2012 - EXTREMELLY SIMPLE Renderer and Swap Chain classes.
 21/02/2012 - Added test classes.
 19/02/2012 - Added class Matrix4, reorganized project folders.
