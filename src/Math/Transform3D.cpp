@@ -96,6 +96,48 @@ Matrix4 rh::newTranslation3d(float x, float y, float z)
 		0, 0, 0, 1);
 }
 
+Matrix4 rh::newLookAt(const Vector3& position, const Vector3& target, const Vector3& up)
+{
+	Vector3 zaxis = (position - target).normalize();
+	Vector3 xaxis = cross(up, zaxis).normalize();
+	Vector3 yaxis = cross(zaxis, xaxis);
+
+	float dx = -xaxis.dot(position);
+	float dy = -yaxis.dot(position);
+	float dz = -zaxis.dot(position);
+
+	return Matrix4(
+		xaxis[X], yaxis[X], zaxis[X], 0,
+		xaxis[Y], yaxis[Y], zaxis[Y], 0,
+		xaxis[Z], yaxis[Z], zaxis[Z], 0,
+		      dx,       dy,       dz, 1);
+}
+
+Matrix4 rh::newOrthogonal(float w, float h, float near, float far)
+{
+	float size = far - near;
+
+	return Matrix4(
+		2.0f / w,		0.0f,		   0.0f,	0.0f,
+			0.0f,	2.0f / h,		   0.0f,	0.0f,
+			0.0f,		0.0f,  -1.0f / size,	0.0f,
+			0.0f,		0.0f,	near / size,	1.0f);
+}
+
+Matrix4 rh::newFovPerspective(float fovy, float aspect, float near, float far)
+{
+	float h = 1.0f / tan(fovy / 2.0f);
+	float w = h * aspect;
+
+	float size = near - far;
+
+	return Matrix4(
+		w,		0.0f,			 0.0f,		 0.0f,
+	 0.0f,		   h,			 0.0f,		 0.0f,
+	 0.0f,		0.0f,		 far/size,		-1.0f,
+	 0.0f,		0.0f,	near*far/size,		 0.0f);
+}
+
 #pragma endregion
 
 #pragma region Left hand
@@ -165,4 +207,46 @@ Matrix4 lh::newTranslation3d(float x, float y, float z)
 		x, y, z, 1);
 }
 
+Matrix4 lh::newLookAt(const Vector3& position, const Vector3& target, const Vector3& up)
+{
+	Vector3 zaxis = (target - position).normalize();
+	Vector3 xaxis = cross(up, zaxis).normalize();
+	Vector3 yaxis = cross(zaxis, xaxis);
+
+	float dx = -xaxis.dot(position);
+	float dy = -yaxis.dot(position);
+	float dz = -zaxis.dot(position);
+
+	return Matrix4(
+		xaxis[X], yaxis[X], zaxis[X], 0,
+		xaxis[Y], yaxis[Y], zaxis[Y], 0,
+		xaxis[Z], yaxis[Z], zaxis[Z], 0,
+		      dx,       dy,       dz, 1);
+}
+
+Matrix4 lh::newOrthogonal(float w, float h, float near, float far)
+{
+	float size = far - near;
+
+	return Matrix4(
+		2.0f / w,		0.0f,		   0.0f,	0.0f,
+			0.0f,	2.0f / h,		   0.0f,	0.0f,
+			0.0f,		0.0f,   1.0f / size,	0.0f,
+			0.0f,		0.0f,  -near / size,	1.0f);
+}
+
+
+Matrix4 lh::newFovPerspective(float fovy, float aspect, float near, float far)
+{
+	float h = 1.0f / tan(fovy / 2.0f);
+	float w = h * aspect;
+
+	float size = far - near;
+
+	return Matrix4(
+		w,		0.0f,			  0.0f,		0.0f,
+	 0.0f,		   h,			  0.0f,		0.0f,
+	 0.0f,		0.0f,		  far/size,		1.0f,
+	 0.0f,		0.0f,	-near*far/size,		0.0f);
+}
 #pragma endregion

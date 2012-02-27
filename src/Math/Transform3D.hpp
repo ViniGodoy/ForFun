@@ -72,6 +72,21 @@ namespace math {
 		{
 			return newTranslation3d(pos[X], pos[Y], pos[Z]);
 		}
+
+		/**
+		 * Creates a new look at matrix.
+		 */
+		Matrix4 newLookAt(const Vector3& position, const Vector3& target, const Vector3& up);		
+
+		/**
+		 * Creates an orthogonal projection matrix
+		 */
+		Matrix4 newOrthogonal(float w, float h, float near, float far);
+
+		/**
+		 * Creates a right-handed perspective projection matrix based on a field of view (FOV).
+		 */
+		Matrix4 newFovPerspective(float fovy, float aspect, float near, float far);
 	}
 
 	namespace lh
@@ -123,6 +138,21 @@ namespace math {
 		{
 			return lh::newTranslation3d(pos[X], pos[Y], pos[Z]);
 		}
+
+		/**
+		 * Creates a new look at matrix.
+		 */
+		Matrix4 newLookAt(const Vector3& position, const Vector3& target, const Vector3& up);
+
+		/**
+		* Creates an orthogonal projection matrix
+		*/
+		Matrix4 newOrthogonal(float w, float h, float near, float far);
+
+		/**
+		* Creates a right-handed perspective projection matrix based on a field of view (FOV).
+		*/
+		Matrix4 newFovPerspective(float fovy, float aspect, float near, float far);
 	}
 }}
 #endif
