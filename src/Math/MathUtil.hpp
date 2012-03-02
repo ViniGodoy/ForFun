@@ -103,7 +103,7 @@ namespace math {
 	*/
 	inline float saturate(float value)
 	{
-		value > 1.0f ? 1.0f : (value < 0 ? 0 : value);
+		return value > 1.0f ? 1.0f : (value < 0 ? 0 : value);
 	}
 
 	/**
@@ -114,7 +114,7 @@ namespace math {
 	*/
 	inline int saturate(int value)
 	{
-		value > 255 ? 255 : (value < 0 ? 0 : value);
+		return value > 255 ? 255 : (value < 0 ? 0 : value);
 	}
 
 	/**
@@ -124,7 +124,7 @@ namespace math {
 	*/
 	inline unsigned saturate(unsigned value)
 	{
-		value > 255 ? 255 : value;
+		return value > 255 ? 255 : value;
 	}
 }}
 #endif // MATHUTIL_H_INCLUDED
