@@ -78,6 +78,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="assert.cpp" />
+    <ClCompile Include="MathUtilTest.cpp" />
     <ClCompile Include="Matrix3Test.cpp" />
     <ClCompile Include="Matrix4Test.cpp" />
     <ClCompile Include="TestsMain.cpp" />
@@ -87,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="assert.hpp" />
+    <ClInclude Include="MathUtilTest.hpp" />
     <ClInclude Include="Matrix3Test.hpp" />
     <ClInclude Include="Matrix4Test.hpp" />
     <ClInclude Include="Vector2Test.hpp" />

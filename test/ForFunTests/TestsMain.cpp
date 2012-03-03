@@ -24,9 +24,11 @@
 #include "Vector4Test.hpp"
 #include "Matrix3Test.hpp"
 #include "Matrix4Test.hpp"
+#include "MathUtilTest.hpp"
 
 int main(int argc, char* argv[])
 {	
+	testMathUtils();
 	testVector2();
 	testVector3();	
 	testVector4();

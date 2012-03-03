@@ -2,7 +2,7 @@
 
 void reportMissing(const std::string& what)
 {
-	cout << "****** MISSING tests for " << what << "! ******" << endl;
+	cerr << "****** MISSING tests for " << what << "! ******" << endl;
 }
 
 void reportTesting(const std::string& what)
@@ -10,21 +10,34 @@ void reportTesting(const std::string& what)
 	cout << "Testing " << what << "..." << endl;
 }
 
+void exitError()
+{
+	system("pause");
+	exit(1);		
+}
+
 void assertTrue(int line, bool value)
 {
 	if (!value) {
-		cout << "Assertion failed at line " << line << "! Value was FALSE and should be TRUE." << endl;
-		system("pause");
-		exit(1);		
+		cerr << "Assertion failed at line " << line << "! Value was FALSE and should be TRUE." << endl;
+		exitError();
+	}
+}
+
+void assertIntEquals(int line, int desired, int value)
+{
+	if (desired != value) 
+	{
+		cerr << "Assertion failed at line " << line << "! Value was " << value << " and should be " << desired << "." << endl;
+		exitError();
 	}
 }
 
 void assertEquals(int line, float desired, float value, float delta)
 {
 	if (!equals(desired, value)) {
-		cout << "Assertion failed at line " << line << "! Value was " << value << " and should be " << desired << "." << endl;
-		system("pause");
-		exit(1);		
+		cerr << "Assertion failed at line " << line << "! Value was " << value << " and should be " << desired << "." << endl;
+		exitError();
 	}
 }
 

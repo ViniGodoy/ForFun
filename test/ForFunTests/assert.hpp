@@ -20,6 +20,7 @@ void reportMissing(const std::string& what);
 void reportTesting(const std::string& what);
 
 void assertTrue(int line, bool value);
+void assertIntEquals(int line, int desired, int value);
 void assertEquals(int line, float desired, float value, float delta=FLOAT_DELTA);
 void assertEquals(int line, float x, float y, const Vector2& vector, float delta=FLOAT_DELTA);
 void assertEquals(int line, float x, float y, float z, const Vector3& vector, float delta=FLOAT_DELTA);
