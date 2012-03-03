@@ -11,8 +11,14 @@ should serve as a solid study base for computer graphics students.
 The project is being constructed for Windows Platform using Visual Studio 2010.
 The code may use C++11 code, such as lambda. Portability is NOT a goal.
 
+Backlog
+-------
+Project backlog and tracking is public available at Pivotal Tracker:
+https://www.pivotaltracker.com/projects/491379
+
 History
 ---------
+03/03/2012 - Added tests to MathUtils
 26/02/2012 - Added Vector4, 3D transforms and encapsulated vector fields.
 22/02/2012 - EXTREMELLY SIMPLE Renderer and Swap Chain classes.
 21/02/2012 - Added test classes.
