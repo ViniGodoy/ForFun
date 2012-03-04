@@ -32,23 +32,29 @@ const int HEIGHT = 600;
 int main(int argc, char* argv[])
 {
 	SwapChain sw(WIDTH,HEIGHT, false);
-	long before = SDL_GetTicks();
-	long time = 0;
+
 	float x = 0;
 	float y = 0;
-	int lines = 0;
-	while (time < 1000)
+	
+	for (int i = 0; i < 5; i++)
 	{
-		int px = static_cast<unsigned>(x) % WIDTH;
-		int py = static_cast<unsigned>(y) % HEIGHT;
-		sw.backBuffer().drawLine(px, py, WIDTH-px-1, HEIGHT-py-1, Color(px & 0xFF, py & 0xFF, (px+py)&0xFF));		
-		x += 0.01;
-		y += x;
-		lines++;
-		time = SDL_GetTicks() - before;
+		long time = 0;
+		int lines = 0;
+		long before = SDL_GetTicks();
+		while (time < 1000)
+		{
+			int px = static_cast<unsigned>(x) % WIDTH;
+			int py = static_cast<unsigned>(y) % HEIGHT;
+			sw.backBuffer().drawLine(px, py, WIDTH-px-1, HEIGHT-py-1, Color(px & 0xFF, py & 0xFF, (px+py)&0xFF));		
+			x += 0.1;
+			y += x;
+			lines++;
+			time = SDL_GetTicks() - before;
+		}
+		sw.swap();
+		cout << "Number of lines in one second: " << lines << endl;
 	}
-	sw.swap();
 	SDL_Delay(3000);
-	cout << "Number of lines drawn in one second:" << lines;
+	
 	return 0;
 }
