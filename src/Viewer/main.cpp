@@ -21,8 +21,10 @@
 
 #include <Renderer\SwapChain.hpp>
 #include <SDL.h>
+#include <iostream>
 
 using namespace fun::render;
+using namespace std;
 
 const int WIDTH = 800;
 const int HEIGHT = 600;
@@ -30,17 +32,23 @@ const int HEIGHT = 600;
 int main(int argc, char* argv[])
 {
 	SwapChain sw(WIDTH,HEIGHT, false);
-	float hcolor = 255.0f / HEIGHT;
-	float wcolor = 255.0f / WIDTH;
-	for (unsigned i = 0; i < WIDTH; i++)
-		sw.backBuffer().drawLine(i, 0, i, HEIGHT-1, Color(0,0, wcolor*i));
+	long before = SDL_GetTicks();
+	long time = 0;
+	float x = 0;
+	float y = 0;
+	int lines = 0;
+	while (time < 1000)
+	{
+		int px = static_cast<unsigned>(x) % WIDTH;
+		int py = static_cast<unsigned>(y) % HEIGHT;
+		sw.backBuffer().drawLine(px, py, WIDTH-px-1, HEIGHT-py-1, Color(px & 0xFF, py & 0xFF, (px+py)&0xFF));		
+		x += 0.01;
+		y += x;
+		lines++;
+		time = SDL_GetTicks() - before;
+	}
 	sw.swap();
-	SDL_Delay(1000);
-
-	for (unsigned i = 0; i < HEIGHT; i++)
-		sw.backBuffer().drawLine(0, i, WIDTH-1, i, Color(hcolor*i,0,0));
-	sw.swap();
-
-	SDL_Delay(1000);
-	return 1;
+	SDL_Delay(3000);
+	cout << "Number of lines drawn in one second:" << lines;
+	return 0;
 }
