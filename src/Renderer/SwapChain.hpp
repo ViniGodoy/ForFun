@@ -19,7 +19,9 @@
 *
 ******************************************************************************/
 
-#pragma once
+#if !defined(__SWAPCHAIN_HPP__)
+#define __SWAPCHAIN_HPP__
+
 #include "PixelBuffer.hpp"
 
 namespace fun {
@@ -34,8 +36,9 @@ namespace render {
 		public:
 			SwapChain(int w, int h, bool fullscreen=true);
 			PixelBuffer& backBuffer();
-			void swap();
+			void flip();
 			~SwapChain();
 	};
-}};
+}}; 
 
+#endif
