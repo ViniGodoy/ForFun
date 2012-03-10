@@ -123,14 +123,14 @@ namespace render {
 			 * Direct access a given pixel. The color value is in specific 
 			 * pixel buffer format. 
 			 */
-			const unsigned int& PixelBuffer::operator() (int x, int y) const;
+			const unsigned int& operator() (int x, int y) const;
 
 			/**
 			 * Direct access a given pixel. The color value is in specific 
 			 * pixel buffer format.  
 			 * Does not blend colors, even if alpha != 0.
 			 */
-			unsigned int& PixelBuffer::operator() (int x, int y);
+			unsigned int& operator() (int x, int y);
 
 			/**
 			 * Converts the given color to the internal unsigned representation
