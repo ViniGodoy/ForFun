@@ -18,9 +18,11 @@
 * http://creativecommons.org/licenses/by-sa/2.5/br/
 *
 ******************************************************************************/
+#include <algorithm>
 
-#if !defined(__PixelBuffer_HPP__)
-#define __PixelBuffer_HPP__
+
+#if !defined(__PIXELBUFFER_HPP__)
+#define __PIXELBUFFER_HPP__
 
 struct SDL_Surface;
 
@@ -175,6 +177,11 @@ namespace render {
 			 */
 			const int& height() const;
 
+			inline void swap(PixelBuffer& other) 
+			{				
+				std::swap(surface, other.surface);
+			}
+
 			/**
 			 * Releases this buffer.
 			 */
@@ -182,4 +189,12 @@ namespace render {
 	};
 }}
 
+namespace std
+{
+	template<>
+	inline void swap<fun::render::PixelBuffer>(fun::render::PixelBuffer& one, fun::render::PixelBuffer& two)
+	{
+		one.swap(two);
+	}
+}
 #endif
