@@ -91,11 +91,10 @@ namespace render {
 		private:
 			SDL_Surface* surface;
 			PixelBuffer(SDL_Surface* _surface);
-
-			void drawVerticalLine(unsigned x0, unsigned y0, 
+			
+			void drawVerticalLine(unsigned x, unsigned y, 
 				unsigned deltaX, unsigned deltaY, int xDir, unsigned color);
-
-			void drawHorizontalLine(unsigned x0, unsigned y0, 
+			void drawHorizontalLine(unsigned x, unsigned y, 
 				unsigned deltaX, unsigned deltaY, int xDir, unsigned color);
 
 			void setDirect(int x, int y, unsigned color);

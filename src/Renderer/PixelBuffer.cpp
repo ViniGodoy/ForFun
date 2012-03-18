@@ -2,19 +2,19 @@
 *
 * COPYRIGHT Vinícius G. Mendonça ALL RIGHTS RESERVED.
 *
-* This software cannot be copied, stored, distributed without  
+* This software cannot be copied, stored, distributed without
 * Vinícius G.Mendonça prior authorization.
 *
-* This file was made available on https://github.com/ViniGodoy/ForFun and it 
-* is free to be restributed or used under Creative Commons license 2.5 br: 
+* This file was made available on https://github.com/ViniGodoy/ForFun and it
+* is free to be restributed or used under Creative Commons license 2.5 br:
 * http://creativecommons.org/licenses/by-sa/2.5/br/
 *
 *******************************************************************************
-* Este software nao pode ser copiado, armazenado, distribuido sem autorização 
+* Este software nao pode ser copiado, armazenado, distribuido sem autorização
 * a priori de Vinícius G. Mendonça
 *
-* Este arquivo foi disponibilizado no site https://github.com/ViniGodoy/ForFun 
-* e esta livre para distribuição seguindo a licença Creative Commons 2.5 br: 
+* Este arquivo foi disponibilizado no site https://github.com/ViniGodoy/ForFun
+* e esta livre para distribuição seguindo a licença Creative Commons 2.5 br:
 * http://creativecommons.org/licenses/by-sa/2.5/br/
 *
 ******************************************************************************/
@@ -27,12 +27,12 @@ using namespace fun::render;
 
 PixelBuffer::PixelBuffer(SDL_Surface* _surface)
 	: surface(_surface)
-{	
+{
 }
 
 PixelBuffer::PixelBuffer(int w, int h)
-{	
-	SDL_PixelFormat *vf = SDL_GetVideoInfo()->vfmt;		
+{
+	SDL_PixelFormat *vf = SDL_GetVideoInfo()->vfmt;
 	surface = SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 32,
 		0xFF0000, 0xFF00, 0xFF, 0xFF000000);
 }
@@ -108,55 +108,54 @@ Color PixelBuffer::unsignedToColor(const unsigned& pixelColor) const
 	return color;
 }
 
-
-void PixelBuffer::drawHorizontalLine(unsigned x0, unsigned y0, unsigned deltaX, unsigned deltaY, int xDir, unsigned color)
+void PixelBuffer::drawHorizontalLine(unsigned x, unsigned y, unsigned deltaX, unsigned deltaY, int xDir, unsigned color)
 {
 	int deltaYx2 = static_cast<int>(deltaY * 2);
 	int deltaYx2MinusDeltaXx2 = deltaYx2 - static_cast<int>(deltaX * 2);
 	int errorTerm = deltaYx2 - static_cast<int>(deltaX);
 
-	(*this)(x0, y0) = color;
+	(*this)(x, y) = color;
 	while (deltaX--)
 	{
-		if (errorTerm < 0) 
+		if (errorTerm < 0)
 			errorTerm += deltaYx2;
 		else
 		{
-			y0++;
+			y++;
 			errorTerm += deltaYx2MinusDeltaXx2;
-		}		
-			
-		x0 += xDir;
-		(*this)(x0, y0) = color;
+		}
+
+		x += xDir;
+		(*this)(x, y) = color;
 	}
 }
 
-void PixelBuffer::drawVerticalLine(unsigned x0, unsigned y0, unsigned deltaX, unsigned deltaY, int xDir, unsigned color)
+void PixelBuffer::drawVerticalLine(unsigned x, unsigned y, unsigned deltaX, unsigned deltaY, int xDir, unsigned color)
 {
 	int deltaXx2 = static_cast<int>(deltaX * 2);
 	int deltaXx2MinusDeltaYx2 = deltaXx2 - static_cast<int>(deltaY * 2);
 	int errorTerm = deltaXx2 - static_cast<int>(deltaY);
 
-	(*this)(x0, y0) = color;
+	(*this)(x, y) = color;
 	while (deltaY--)
 	{
-		if (errorTerm < 0) 
+		if (errorTerm < 0)
 			errorTerm += deltaXx2;
 		else
 		{
-			x0 += xDir;
+			x += xDir;
 			errorTerm += deltaXx2MinusDeltaYx2;
-		}		
-			
-		y0++;
-		(*this)(x0, y0) = color;
+		}
+
+		y++;
+		(*this)(x, y) = color;
 	}
 }
 
 void PixelBuffer::drawLine(int x0, int y0, int x1, int y1, const Color& color)
-{	
+{
 	//Make sure y is positive
-	if (y0 > y1) 
+	if (y0 > y1)
 	{
 		std::swap(y0, y1);
 		std::swap(x0, x1);
@@ -167,7 +166,7 @@ void PixelBuffer::drawLine(int x0, int y0, int x1, int y1, const Color& color)
 	int deltaY = y1 - y0;
 	int xDir = x1 > x0 ? 1 : -1;
 	unsigned pixelColor = colorToUnsigned(color);
-	
+
 	if (deltaX > deltaY)
 		drawHorizontalLine(x0, y0, deltaX, deltaY, xDir, pixelColor);
 	else
@@ -185,7 +184,7 @@ const int& PixelBuffer::height() const
 }
 
 PixelBuffer::~PixelBuffer()
-{	
+{
 	if (surface != SDL_GetVideoSurface())
 		SDL_FreeSurface(surface);
 }
