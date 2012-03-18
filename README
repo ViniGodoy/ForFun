@@ -18,6 +18,7 @@ https://www.pivotaltracker.com/projects/491379
 
 History
 ---------
+18/03/2012 - Added lines with multiple colors.
 03/03/2012 - Added tests to MathUtils, Color union and Bresenham line function.
 26/02/2012 - Added Vector4, 3D transforms and encapsulated vector fields.
 22/02/2012 - EXTREMELLY SIMPLE Renderer and Swap Chain classes.
