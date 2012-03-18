@@ -20,10 +20,32 @@
 ******************************************************************************/
 
 #include "PixelBuffer.hpp"
+#include "../Math/Vector4.hpp"
+
 #include "SDL.h"
 #include <algorithm>
 
 using namespace fun::render;
+using namespace fun::math;
+
+/**
+* Creates a color from the given vector.
+*/
+Color::Color(const Vector4& color)
+	: r(static_cast<unsigned char>(saturate(color[R]) * 255)),
+	  g(static_cast<unsigned char>(saturate(color[G]) * 255)),
+	  b(static_cast<unsigned char>(saturate(color[B]) * 255)),
+	  a(static_cast<unsigned char>(saturate(color[A]) * 255))
+{
+}
+
+/**
+* Creates a vector from the given color.
+*/
+Vector4 Color::toVector() const
+{
+	return Vector4(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
+}
 
 PixelBuffer::PixelBuffer(SDL_Surface* _surface)
 	: surface(_surface)
@@ -130,6 +152,39 @@ void PixelBuffer::drawHorizontalLine(unsigned x, unsigned y, unsigned deltaX, un
 	}
 }
 
+void PixelBuffer::drawHorizontalLine(unsigned x, unsigned y,
+	unsigned deltaX, unsigned deltaY, int xDir,
+	const Color& color0, const Color& color1)
+{
+	float x1 = static_cast<float>(x);
+	float dx = static_cast<float>(deltaX);
+
+	Vector4 c0 = color0.toVector();
+	Vector4 c1 = color1.toVector();
+	Vector4 colorDiff = c1 - c0;
+
+	int deltaYx2 = static_cast<int>(deltaY * 2);
+	int deltaYx2MinusDeltaXx2 = deltaYx2 - static_cast<int>(deltaX * 2);
+	int errorTerm = deltaYx2 - static_cast<int>(deltaX);
+
+	(*this)(x, y) = colorToUnsigned(color0);
+
+	while (deltaX--)
+	{
+		if (errorTerm < 0)
+			errorTerm += deltaYx2;
+		else
+		{
+			y++;
+			errorTerm += deltaYx2MinusDeltaXx2;
+		}
+		x += xDir;
+
+		Vector4 color = c0 + (colorDiff * (x - x1) / dx);
+		(*this)(x, y) = colorToUnsigned(Color(color));
+	}
+}
+
 void PixelBuffer::drawVerticalLine(unsigned x, unsigned y, unsigned deltaX, unsigned deltaY, int xDir, unsigned color)
 {
 	int deltaXx2 = static_cast<int>(deltaX * 2);
@@ -152,7 +207,41 @@ void PixelBuffer::drawVerticalLine(unsigned x, unsigned y, unsigned deltaX, unsi
 	}
 }
 
-void PixelBuffer::drawLine(int x0, int y0, int x1, int y1, const Color& color)
+void PixelBuffer::drawVerticalLine(unsigned x, unsigned y, unsigned deltaX, unsigned deltaY, int xDir,
+	const Color& color0, const Color& color1)
+{
+	float y1 = static_cast<float>(y);
+	float dy = static_cast<float>(deltaY);
+
+	Vector4 c0 = color0.toVector();
+	Vector4 c1 = color1.toVector();
+	Vector4 colorDiff = c1 - c0;
+
+	int deltaXx2 = static_cast<int>(deltaX * 2);
+	int deltaXx2MinusDeltaYx2 = deltaXx2 - static_cast<int>(deltaY * 2);
+	int errorTerm = deltaXx2 - static_cast<int>(deltaY);
+
+	(*this)(x, y) = colorToUnsigned(color0);
+	while (deltaY--)
+	{
+		if (errorTerm < 0)
+			errorTerm += deltaXx2;
+		else
+		{
+			x += xDir;
+			errorTerm += deltaXx2MinusDeltaYx2;
+		}
+
+		y++;
+
+		Vector4 color = c0 + (colorDiff * (y - y1) / dy);
+		(*this)(x, y) = colorToUnsigned(Color(color));
+	}
+}
+
+void PixelBuffer::drawLine(
+	int x0, int y0, Color color0,
+	int x1, int y1, Color color1)
 {
 	//Make sure y is positive
 	if (y0 > y1)
@@ -165,12 +254,37 @@ void PixelBuffer::drawLine(int x0, int y0, int x1, int y1, const Color& color)
 	int deltaX = abs(x1 - x0);
 	int deltaY = y1 - y0;
 	int xDir = x1 > x0 ? 1 : -1;
-	unsigned pixelColor = colorToUnsigned(color);
 
 	if (deltaX > deltaY)
-		drawHorizontalLine(x0, y0, deltaX, deltaY, xDir, pixelColor);
+		if (color0.value == color1.value)
+			drawHorizontalLine(x0, y0, deltaX, deltaY, xDir, colorToUnsigned(color0));
+		else
+			drawHorizontalLine(x0, y0, deltaX, deltaY, xDir, color0, color1);
 	else
-		drawVerticalLine(x0, y0, deltaX, deltaY, xDir, pixelColor);
+		if (color0.value == color1.value)
+			drawVerticalLine(x0, y0, deltaX, deltaY, xDir, colorToUnsigned(color0));
+		else
+			drawVerticalLine(x0, y0, deltaX, deltaY, xDir, color0, color1);
+}
+
+/**
+	* Draws a flat triangle
+	*/
+void PixelBuffer::drawTriangle(int x0, int y0,
+	int x1, int y1,
+	int x2, int y2,
+	Color color)
+{
+}
+
+/**
+	* Draws a triangle
+	*/
+void PixelBuffer::drawTriangle(
+	int x0, int y0, Color color0,
+	int x1, int y1, Color color1,
+	int x2, int y2, Color color2)
+{
 }
 
 const int& PixelBuffer::width() const

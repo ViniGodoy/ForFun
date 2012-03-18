@@ -19,7 +19,7 @@
 *
 ******************************************************************************/
 #include <algorithm>
-
+#include "../Math/Vector4.hpp"
 
 #if !defined(__PIXELBUFFER_HPP__)
 #define __PIXELBUFFER_HPP__
@@ -81,6 +81,15 @@ namespace render {
 			for (int i = 0; i < 4; i++) argb[i] = _argb[i];			
 		}
 
+		/**
+		 * Creates a color from the given vector.
+		 */
+		explicit Color(const math::Vector4& color);
+
+		/**
+		 * Creates a vector from the given color.
+		 */
+		math::Vector4 toVector() const;
 	};
 
 	/**
@@ -92,10 +101,15 @@ namespace render {
 			SDL_Surface* surface;
 			PixelBuffer(SDL_Surface* _surface);
 			
+			void drawHorizontalLine(unsigned x, unsigned y, unsigned deltaX, unsigned deltaY, int xDir, unsigned color);
+			void drawVerticalLine(unsigned x, unsigned y, unsigned deltaX, unsigned deltaY, int xDir, unsigned color);
+
 			void drawVerticalLine(unsigned x, unsigned y, 
-				unsigned deltaX, unsigned deltaY, int xDir, unsigned color);
+				unsigned deltaX, unsigned deltaY, int xDir, 
+				const Color& color0, const Color& color1);
 			void drawHorizontalLine(unsigned x, unsigned y, 
-				unsigned deltaX, unsigned deltaY, int xDir, unsigned color);
+				unsigned deltaX, unsigned deltaY, int xDir,
+				const Color& color0, const Color& color1);
 
 			void setDirect(int x, int y, unsigned color);
 			
@@ -162,9 +176,36 @@ namespace render {
 			}
 
 			/**
+			 * Draws a flat line.
+			 */
+			inline void drawLine(int x0, int y0, 
+				int x1, int y1, Color color)
+			{
+				drawLine(x0, y0, color, x1, y1, color);
+			}
+
+			/**
 			 * Draws a line.
 			 */
-			void drawLine(int x0, int y0, int x1, int y1, const Color& color);
+			void drawLine(
+				int x0, int y0, Color color0,
+				int x1, int y1, Color color1);
+
+			/**
+			 * Draws a flat triangle
+			 */
+			void drawTriangle(int x0, int y0,
+				int x1, int y1,
+				int x2, int y2, 
+				Color color);
+
+			/**
+			 * Draws a triangle
+			 */
+			void drawTriangle(
+				int x0, int y0, Color color0,
+				int x1, int y1, Color color1,
+				int x2, int y2, Color color2);
 
 			/**
 			 * Returns this buffer width.
@@ -194,6 +235,12 @@ namespace std
 	inline void swap<fun::render::PixelBuffer>(fun::render::PixelBuffer& one, fun::render::PixelBuffer& two)
 	{
 		one.swap(two);
+	}
+
+	template<>
+	inline void swap<fun::render::Color>(fun::render::Color& one, fun::render::Color& two)
+	{
+		swap(one.value, two.value);
 	}
 }
 #endif
