@@ -32,10 +32,10 @@ using namespace fun::math;
 * Creates a color from the given vector.
 */
 Color::Color(const Vector4& color)
-	: r(static_cast<unsigned char>(saturate(color[R]) * 255)),
-	  g(static_cast<unsigned char>(saturate(color[G]) * 255)),
-	  b(static_cast<unsigned char>(saturate(color[B]) * 255)),
-	  a(static_cast<unsigned char>(saturate(color[A]) * 255))
+	: r(static_cast<unsigned char>(color[R] * 255)),
+	  g(static_cast<unsigned char>(color[G] * 255)),
+	  b(static_cast<unsigned char>(color[B] * 255)),
+	  a(static_cast<unsigned char>(color[A] * 255))
 {
 }
 
@@ -161,7 +161,7 @@ void PixelBuffer::drawHorizontalLine(unsigned x, unsigned y,
 
 	Vector4 c0 = color0.toVector();
 	Vector4 c1 = color1.toVector();
-	Vector4 colorDiff = c1 - c0;
+	Vector4 colorDiff = (c1 - c0) *= xDir;
 
 	int deltaYx2 = static_cast<int>(deltaY * 2);
 	int deltaYx2MinusDeltaXx2 = deltaYx2 - static_cast<int>(deltaX * 2);
@@ -180,7 +180,10 @@ void PixelBuffer::drawHorizontalLine(unsigned x, unsigned y,
 		}
 		x += xDir;
 
-		Vector4 color = c0 + (colorDiff * (x - x1) / dx);
+		Vector4 color(colorDiff);
+		color *= (x - x1) / dx;
+		color += c0;
+
 		(*this)(x, y) = colorToUnsigned(Color(color));
 	}
 }
@@ -233,8 +236,9 @@ void PixelBuffer::drawVerticalLine(unsigned x, unsigned y, unsigned deltaX, unsi
 		}
 
 		y++;
-
-		Vector4 color = c0 + (colorDiff * (y - y1) / dy);
+		Vector4 color(colorDiff);
+		color *= (y - y1) / dy;
+		color += c0;
 		(*this)(x, y) = colorToUnsigned(Color(color));
 	}
 }
@@ -248,6 +252,7 @@ void PixelBuffer::drawLine(
 	{
 		std::swap(y0, y1);
 		std::swap(x0, x1);
+		std::swap(color0, color1);
 	}
 
 	//Calculate deltas, x direction and color
