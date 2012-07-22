@@ -19,7 +19,7 @@
 *
 ******************************************************************************/
 #include <algorithm>
-#include "../Math/Vector4.hpp"
+#include "Color.hpp"
 
 #if !defined(__PIXELBUFFER_HPP__)
 #define __PIXELBUFFER_HPP__
@@ -29,68 +29,6 @@ struct SDL_Surface;
 namespace fun {
 namespace render {
 	class SwapChain;
-
-	/**
-	 * Represents an ARGB color value.
-	 */
-	union Color
-	{
-		struct 
-		{	
-			unsigned char a;
-			unsigned char r;
-			unsigned char g;
-			unsigned char b;						
-		};
-		unsigned char argb[4];
-		unsigned value;
-
-		/**
-		 * Default constructor. 
-		 * Creates a black pixel (r=g=b=0, a=255).
-		 */
-		Color() : r(0), g(0), b(0), a(255) {}
-
-		/**
-		 * Creates a color with the given color.
-		 *
-		 * @param _value The color value in ARGB byte order.
-		 */
-		explicit Color(unsigned _value) : value(_value) {}
-
-		/**
-		 * Creates a color with the given color components. The constructor
-		 * parameter order is RGBA for convenience, but the created color
-		 * value will still be in ARGB byte order.
-		 *
-		 * @param _r Red color component.
-		 * @param _g Green color component.
-		 * @param _b Blue color component.
-		 * @param _a Alpha color component (defaults to 255).
-		 */
-		Color(unsigned char _r, unsigned char _g, unsigned char _b, 
-			unsigned char _a=255) : r(_r), g(_g), b(_b), a(_a) {}
-
-		/**
-		 * Creates a color with the given color.
-		 *
-		 * @param _value The color value in ARGB byte order.
-		 */
-		Color(unsigned char _argb[4]) 
-		{
-			for (int i = 0; i < 4; i++) argb[i] = _argb[i];			
-		}
-
-		/**
-		 * Creates a color from the given vector.
-		 */
-		explicit Color(const math::Vector4& color);
-
-		/**
-		 * Creates a vector from the given color.
-		 */
-		math::Vector4 toVector() const;
-	};
 
 	/**
 	 * Represents a buffer of pixels.

@@ -85,8 +85,8 @@ void drawFlatLines(SwapChain& sw)
 	long time = 0;
 	int lines = 0;
 	long before = SDL_GetTicks();
-	float x = rand() % WIDTH;
-	float y = rand() % HEIGHT;
+	float x = static_cast<float>(rand() % WIDTH);
+	float y = static_cast<float>(rand() % HEIGHT);
 
 	while (time < 1000)
 	{
@@ -108,8 +108,8 @@ void drawLines(SwapChain& sw)
 	long time = 0;
 	int lines = 0;
 	long before = SDL_GetTicks();
-	float x = rand() % WIDTH;
-	float y = rand() % HEIGHT;
+	float x = static_cast<float>(rand() % WIDTH);
+	float y = static_cast<float>(rand() % HEIGHT);
 
 	while (time < 1000)
 	{
