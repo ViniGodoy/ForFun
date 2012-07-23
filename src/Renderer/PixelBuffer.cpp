@@ -143,11 +143,11 @@ void PixelBuffer::drawLine(
 
 void updateMinMax(const std::vector<Point>& points, int* min, int* max)
 {
-	for (int i = 0; i < points.size(); ++i)
+	for (unsigned i = 0; i < points.size(); ++i)
 	{
 		Point p = points[i];
-		if (min[p.y] == -1 || p.x < min[p.y]) min[p.y] = p.x;
-		if (max[p.y] == -1 || p.x > max[p.y]) max[p.y] = p.x;
+		if (p.x < min[p.y]) min[p.y] = p.x;
+		if (p.x > max[p.y]) max[p.y] = p.x;
 	}
 }
 
@@ -176,8 +176,8 @@ void calculateEdges(int x0, int y0,
 
 	int* minx = new int[maxy+1];
 	int* maxx = new int[maxy+1];
-	for (int i = miny; i <= maxy; ++i) minx[i] = -1;
-	for (int i = miny; i <= maxy; ++i) maxx[i] = -1;
+	for (int i = miny; i <= maxy; ++i) minx[i] = std::numeric_limits<int>::max();
+	for (int i = miny; i <= maxy; ++i) maxx[i] = std::numeric_limits<int>::min();
 
 	std::vector<Point> tmp;
 
@@ -252,7 +252,7 @@ void PixelBuffer::drawTriangle(
 		for (int x = minx[y]; x <= maxx[y]; ++x)
 		{
 			Vector3 b = baricentric(x0, y0, x1, y1, x2, y2, x, y);
-			Vector4 c = b[X]* c0 + b[Y] * c1 + b[Z] * c2;
+			Vector4 c = b[X] * c0 + b[Y] * c1 + b[Z] * c2;
 			set(x, y, Color(c));
 		}
 

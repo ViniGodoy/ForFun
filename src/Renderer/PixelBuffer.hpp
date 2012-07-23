@@ -39,8 +39,6 @@ namespace render {
 			SDL_Surface* surface;
 			PixelBuffer(SDL_Surface* _surface);
 			
-			void setDirect(int x, int y, unsigned color);
-			
 		public:		
 			friend class SwapChain;
 
