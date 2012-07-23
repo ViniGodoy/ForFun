@@ -127,6 +127,47 @@ void drawLines(SwapChain& sw)
 	cout << "Number of lines in one second: " << lines << endl;
 }
 
+void drawFlatTriangles(SwapChain& sw)
+{
+	long time = 0;
+	int count = 0;
+	long before = SDL_GetTicks();
+
+	while (time < 1000)
+	{
+		unsigned char tone = static_cast<unsigned char>(time % 255);
+		sw.backBuffer().drawTriangle(
+			400,0,
+			799,599,
+			0,499,
+			Color(tone, tone, tone));
+		count++;
+		time = SDL_GetTicks() - before;
+	}
+	sw.flip();
+	cout << "Number of flat triangles in one second: " << count << endl;
+}
+
+void drawTriangles(SwapChain& sw)
+{
+	long time = 0;
+	int count = 0;
+	long before = SDL_GetTicks();
+
+	while (time < 1000)
+	{
+		unsigned char tone = static_cast<unsigned char>(time % 255);
+		sw.backBuffer().drawTriangle(
+			400,0, Color(tone,0,0),
+			799,499, Color(0,tone,0),
+			0,599, Color(0,0,tone));
+		count++;
+		time = SDL_GetTicks() - before;
+	}
+	sw.flip();
+	cout << "Number of triangles in one second: " << count << endl;
+}
+
 int main(int argc, char* argv[])
 {
 	srand(time(NULL));
@@ -150,6 +191,18 @@ int main(int argc, char* argv[])
 	for (int i = 0; i < 5; i++)
 	{
 		drawFlatLines(sw);
+		SDL_Delay(DELAY_BETWEEN_TESTS);
+	}
+
+	for (int i = 0; i < 5; i++)
+	{
+		drawFlatTriangles(sw);
+		SDL_Delay(DELAY_BETWEEN_TESTS);
+	}
+
+	for (int i = 0; i < 5; i++)
+	{
+		drawTriangles(sw);
 		SDL_Delay(DELAY_BETWEEN_TESTS);
 	}
 
