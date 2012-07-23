@@ -224,10 +224,11 @@ Vector3 baricentric(
 	int y1y2 = y1 - y2;
 	int x2x0 = x2 - x0;
 
-	float area = y0y2*x1x2+y1y2*x2x0;
+	float areaDenom = 1.0f / (y0y2*x1x2+y1y2*x2x0);
+
 	Vector3 b;
-	b[0] = ((py - y2)*x1x2 + y1y2*(x2 - px)) / area;
-	b[1] = ((py - y0)*x2x0 + (-y0y2)*(x0 - px)) / area;
+	b[0] = ((py - y2)*x1x2 + y1y2*(x2 - px)) * areaDenom;
+	b[1] = ((py - y0)*x2x0 + (-y0y2)*(x0 - px)) * areaDenom;
 	b[2] = 1.0f - b[0] - b[1];
 	return b;
 }
