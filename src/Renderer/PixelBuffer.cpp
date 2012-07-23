@@ -23,6 +23,9 @@
 #include "../Math/Vector4.hpp"
 
 #include "SDL.h"
+#include "Bresenham.hpp"
+#include "../Math/Vector3.hpp"
+
 #include <algorithm>
 
 using namespace fun::render;
@@ -112,156 +115,121 @@ Color PixelBuffer::unsignedToColor(const unsigned& pixelColor) const
 	return color;
 }
 
-void PixelBuffer::drawHorizontalLine(unsigned x, unsigned y, unsigned deltaX, unsigned deltaY, int xDir, unsigned color)
-{
-	int deltaYx2 = static_cast<int>(deltaY * 2);
-	int deltaYx2MinusDeltaXx2 = deltaYx2 - static_cast<int>(deltaX * 2);
-	int errorTerm = deltaYx2 - static_cast<int>(deltaX);
-
-	(*this)(x, y) = color;
-	while (deltaX--)
-	{
-		if (errorTerm < 0)
-			errorTerm += deltaYx2;
-		else
-		{
-			y++;
-			errorTerm += deltaYx2MinusDeltaXx2;
-		}
-
-		x += xDir;
-		(*this)(x, y) = color;
-	}
-}
-
-void PixelBuffer::drawHorizontalLine(unsigned x, unsigned y,
-	unsigned deltaX, unsigned deltaY, int xDir,
-	const Color& color0, const Color& color1)
-{
-	float x1 = static_cast<float>(x);
-	float dx = static_cast<float>(deltaX);
-
-	Vector4 c0 = color0.toVector();
-	Vector4 c1 = color1.toVector();
-	Vector4 colorDiff = (c1 - c0) *= xDir;
-
-	int deltaYx2 = static_cast<int>(deltaY * 2);
-	int deltaYx2MinusDeltaXx2 = deltaYx2 - static_cast<int>(deltaX * 2);
-	int errorTerm = deltaYx2 - static_cast<int>(deltaX);
-
-	(*this)(x, y) = colorToUnsigned(color0);
-
-	while (deltaX--)
-	{
-		if (errorTerm < 0)
-			errorTerm += deltaYx2;
-		else
-		{
-			y++;
-			errorTerm += deltaYx2MinusDeltaXx2;
-		}
-		x += xDir;
-
-		Vector4 color(colorDiff);
-		color *= (x - x1) / dx;
-		color += c0;
-
-		(*this)(x, y) = colorToUnsigned(Color(color));
-	}
-}
-
-void PixelBuffer::drawVerticalLine(unsigned x, unsigned y, unsigned deltaX, unsigned deltaY, int xDir, unsigned color)
-{
-	int deltaXx2 = static_cast<int>(deltaX * 2);
-	int deltaXx2MinusDeltaYx2 = deltaXx2 - static_cast<int>(deltaY * 2);
-	int errorTerm = deltaXx2 - static_cast<int>(deltaY);
-
-	(*this)(x, y) = color;
-	while (deltaY--)
-	{
-		if (errorTerm < 0)
-			errorTerm += deltaXx2;
-		else
-		{
-			x += xDir;
-			errorTerm += deltaXx2MinusDeltaYx2;
-		}
-
-		y++;
-		(*this)(x, y) = color;
-	}
-}
-
-void PixelBuffer::drawVerticalLine(unsigned x, unsigned y, unsigned deltaX, unsigned deltaY, int xDir,
-	const Color& color0, const Color& color1)
-{
-	float y1 = static_cast<float>(y);
-	float dy = static_cast<float>(deltaY);
-
-	Vector4 c0 = color0.toVector();
-	Vector4 c1 = color1.toVector();
-	Vector4 colorDiff = c1 - c0;
-
-	int deltaXx2 = static_cast<int>(deltaX * 2);
-	int deltaXx2MinusDeltaYx2 = deltaXx2 - static_cast<int>(deltaY * 2);
-	int errorTerm = deltaXx2 - static_cast<int>(deltaY);
-
-	(*this)(x, y) = colorToUnsigned(color0);
-	while (deltaY--)
-	{
-		if (errorTerm < 0)
-			errorTerm += deltaXx2;
-		else
-		{
-			x += xDir;
-			errorTerm += deltaXx2MinusDeltaYx2;
-		}
-
-		y++;
-		Vector4 color(colorDiff);
-		color *= (y - y1) / dy;
-		color += c0;
-		(*this)(x, y) = colorToUnsigned(Color(color));
-	}
-}
-
 void PixelBuffer::drawLine(
 	int x0, int y0, Color color0,
 	int x1, int y1, Color color1)
 {
-	//Make sure y is positive
-	if (y0 > y1)
-	{
-		std::swap(y0, y1);
-		std::swap(x0, x1);
+	std::vector<Point> points;
+
+	if (bresenham(x0, y0, x1, y1, points))
 		std::swap(color0, color1);
-	}
 
-	//Calculate deltas, x direction and color
-	int deltaX = abs(x1 - x0);
-	int deltaY = y1 - y0;
-	int xDir = x1 > x0 ? 1 : -1;
-
-	if (deltaX > deltaY)
-		if (color0.value == color1.value)
-			drawHorizontalLine(x0, y0, deltaX, deltaY, xDir, colorToUnsigned(color0));
-		else
-			drawHorizontalLine(x0, y0, deltaX, deltaY, xDir, color0, color1);
+	if (color0.value == color1.value)
+		for (unsigned i = 0; i < points.size(); ++i)
+			(*this)(points[i].x, points[i].y) = colorToUnsigned(color0);
 	else
-		if (color0.value == color1.value)
-			drawVerticalLine(x0, y0, deltaX, deltaY, xDir, colorToUnsigned(color0));
-		else
-			drawVerticalLine(x0, y0, deltaX, deltaY, xDir, color0, color1);
+	{
+		Vector4 colorStep =
+			(color1.toVector() - color0.toVector()) / static_cast<float>(points.size());
+		Vector4 color = color0.toVector();
+
+		for (unsigned i = 0; i < points.size(); ++i)
+		{
+			set(points[i].x, points[i].y, Color(color));
+			color += colorStep;
+		}
+	}
+}
+
+void updateMinMax(const std::vector<Point>& points, int* min, int* max)
+{
+	for (int i = 0; i < points.size(); ++i)
+	{
+		Point p = points[i];
+		if (min[p.y] == -1 || p.x < min[p.y]) min[p.y] = p.x;
+		if (max[p.y] == -1 || p.x > max[p.y]) max[p.y] = p.x;
+	}
+}
+
+int min(int a, int b, int c)
+{
+	int m = a < b ? a : b;
+	return m < c ? m : c;
+}
+
+int max(int a, int b, int c)
+{
+	int m = a > b ? a : b;
+	return m > c ? m : c;
+}
+
+void calculateEdges(int x0, int y0,
+	int x1, int y1,
+	int x2, int y2,
+	int& miny,
+	int& maxy,
+	int** edgeMin,
+	int** edgeMax)
+{
+	miny = min(y0, y1, y2);
+	maxy = max(y0, y1, y2);
+
+	int* minx = new int[maxy+1];
+	int* maxx = new int[maxy+1];
+	for (int i = miny; i <= maxy; ++i) minx[i] = -1;
+	for (int i = miny; i <= maxy; ++i) maxx[i] = -1;
+
+	std::vector<Point> tmp;
+
+	bresenham(x0, y0, x1, y1, tmp);
+	updateMinMax(tmp, minx, maxx);
+
+	bresenham(x1, y1, x2, y2, tmp);
+	updateMinMax(tmp, minx, maxx);
+
+	bresenham(x2, y2, x0, y0, tmp);
+	updateMinMax(tmp, minx, maxx);
+	*edgeMin = minx;
+	*edgeMax = maxx;
 }
 
 /**
-	* Draws a flat triangle
-	*/
+* Draws a flat triangle
+*/
 void PixelBuffer::drawTriangle(int x0, int y0,
 	int x1, int y1,
 	int x2, int y2,
 	Color color)
 {
+	int miny, maxy;
+	int* minx, *maxx;
+	calculateEdges(x0, y0, x1, y1, x2, y2, miny, maxy, &minx, &maxx);
+
+	for (int y = miny; y <= maxy; ++y)
+		for (int x = minx[y]; x <= maxx[y]; ++x)
+			set(x, y, color);
+
+	delete [] minx;
+	delete [] maxx;
+}
+
+Vector3 baricentric(
+	int x0, int y0,
+	int x1, int y1,
+	int x2, int y2,
+	int px, int py)
+{
+	int y0y2 = y0 - y2;
+	int x1x2 = x1 - x2;
+	int y1y2 = y1 - y2;
+	int x2x0 = x2 - x0;
+
+	float area = y0y2*x1x2+y1y2*x2x0;
+	Vector3 b;
+	b[0] = ((py - y2)*x1x2 + y1y2*(x2 - px)) / area;
+	b[1] = ((py - y0)*x2x0 + (-y0y2)*(x0 - px)) / area;
+	b[2] = 1.0f - b[0] - b[1];
+	return b;
 }
 
 /**
@@ -272,6 +240,23 @@ void PixelBuffer::drawTriangle(
 	int x1, int y1, Color color1,
 	int x2, int y2, Color color2)
 {
+	int miny, maxy;
+	int* minx, *maxx;
+	Vector4 c0 = color0.toVector();
+	Vector4 c1 = color1.toVector();
+	Vector4 c2 = color2.toVector();
+
+	calculateEdges(x0, y0, x1, y1, x2, y2, miny, maxy, &minx, &maxx);
+	for (int y = miny; y <= maxy; ++y)
+		for (int x = minx[y]; x <= maxx[y]; ++x)
+		{
+			Vector3 b = baricentric(x0, y0, x1, y1, x2, y2, x, y);
+			Vector4 c = b[X]* c0 + b[Y] * c1 + b[Z] * c2;
+			set(x, y, Color(c));
+		}
+
+	delete [] minx;
+	delete [] maxx;
 }
 
 const int& PixelBuffer::width() const

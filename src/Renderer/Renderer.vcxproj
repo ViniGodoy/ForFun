@@ -78,11 +78,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Bresenham.hpp" />
     <ClInclude Include="Color.hpp" />
     <ClInclude Include="PixelBuffer.hpp" />
     <ClInclude Include="SwapChain.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bresenham.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="PixelBuffer.cpp" />
     <ClCompile Include="SwapChain.cpp" />
