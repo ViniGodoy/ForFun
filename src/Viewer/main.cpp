@@ -19,7 +19,7 @@
 *
 ******************************************************************************/
 
-#include <Renderer\SwapChain.hpp>
+#include "..\Renderer\SwapChain.hpp"
 #include <time.h>
 
 #include <SDL.h>
