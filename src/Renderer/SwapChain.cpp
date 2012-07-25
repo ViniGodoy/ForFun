@@ -31,6 +31,7 @@ SwapChain::SwapChain(int w, int h, bool fullscreen)
 
 	if (fullscreen) flags |= SDL_FULLSCREEN;
 	SDL_Surface* video = SDL_SetVideoMode(w, h, 32, flags);
+	SDL_WM_SetCaption("For fun renderer", nullptr);
 	if (video == NULL)
 		exit(1); //TODO: Replace by exception
 	buffer = new PixelBuffer(video);
