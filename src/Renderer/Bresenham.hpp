@@ -6,21 +6,11 @@ namespace fun {
 namespace render {
 	struct Point
 	{
-		struct YOrder
-		{
-			bool operator() (const Point& p1, const Point& p2) 
-			{
-				if (p1.y < p2.y)
-					return true;
-				if (p1.y > p2.y)
-					return false;
-
-				return p1.x < p2.x;
-			}
-		};
-
 		int x;
 		int y;
+
+		Point() : x(0), y(0) {}
+		Point(int x0, int y0) : x(x0), y(y0) {}
 
 		void set(int x, int y)
 		{
