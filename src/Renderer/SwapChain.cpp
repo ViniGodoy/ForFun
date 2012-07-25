@@ -20,7 +20,7 @@
 ******************************************************************************/
 
 #include "SwapChain.hpp"
-#include "SDL.h"
+#include <SDL.h>
 
 using namespace fun::render;
 

@@ -20,11 +20,12 @@
 ******************************************************************************/
 
 #include "PixelBuffer.hpp"
+#include "Bresenham.hpp"
+
+#include "../Math/Vector3.hpp"
 #include "../Math/Vector4.hpp"
 
-#include "SDL.h"
-#include "Bresenham.hpp"
-#include "../Math/Vector3.hpp"
+#include <SDL.h>
 
 #include <algorithm>
 
