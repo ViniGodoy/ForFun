@@ -243,17 +243,19 @@ void PixelBuffer::drawTriangle(
 {
 	int miny, maxy;
 	int* minx, *maxx;
-	Vector4 c0 = color0.toVector();
-	Vector4 c1 = color1.toVector();
-	Vector4 c2 = color2.toVector();
 
 	calculateEdges(x0, y0, x1, y1, x2, y2, miny, maxy, &minx, &maxx);
 	for (int y = miny; y <= maxy; ++y)
 		for (int x = minx[y]; x <= maxx[y]; ++x)
 		{
 			Vector3 b = baricentric(x0, y0, x1, y1, x2, y2, x, y);
-			Vector4 c = b[X] * c0 + b[Y] * c1 + b[Z] * c2;
-			set(x, y, Color(c));
+			Color c(
+				static_cast<unsigned char>(color0.r*b[X]+color1.r*b[Y]+color2.r*b[Z]),
+				static_cast<unsigned char>(color0.g*b[X]+color1.g*b[Y]+color2.g*b[Z]),
+				static_cast<unsigned char>(color0.b*b[X]+color1.b*b[Y]+color2.b*b[Z]),
+				static_cast<unsigned char>(color0.a*b[X]+color1.a*b[Y]+color2.a*b[Z])
+			);
+			set(x, y, c);
 		}
 
 	delete [] minx;
