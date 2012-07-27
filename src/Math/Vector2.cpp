@@ -2,19 +2,19 @@
 *
 * COPYRIGHT Vinícius G. Mendonça ALL RIGHTS RESERVED.
 *
-* This software cannot be copied, stored, distributed without  
+* This software cannot be copied, stored, distributed without
 * Vinícius G.Mendonça prior authorization.
 *
-* This file was made available on https://github.com/ViniGodoy/ForFun and it 
-* is free to be restributed or used under Creative Commons license 2.5 br: 
+* This file was made available on https://github.com/ViniGodoy/ForFun and it
+* is free to be restributed or used under Creative Commons license 2.5 br:
 * http://creativecommons.org/licenses/by-sa/2.5/br/
 *
 *******************************************************************************
-* Este software nao pode ser copiado, armazenado, distribuido sem autorização 
+* Este software nao pode ser copiado, armazenado, distribuido sem autorização
 * a priori de Vinícius G. Mendonça
 *
-* Este arquivo foi disponibilizado no site https://github.com/ViniGodoy/ForFun 
-* e esta livre para distribuição seguindo a licença Creative Commons 2.5 br: 
+* Este arquivo foi disponibilizado no site https://github.com/ViniGodoy/ForFun
+* e esta livre para distribuição seguindo a licença Creative Commons 2.5 br:
 * http://creativecommons.org/licenses/by-sa/2.5/br/
 *
 ******************************************************************************/
@@ -28,18 +28,18 @@
 using namespace fun::math;
 
 Vector2::Vector2()
-{	
+{
 	for (int i = 0; i < dim(); ++i)
 		v[i] = 0.0f;
 }
 
 Vector2::Vector2(float _x, float _y)
 {
-	v[X] = _x;
-	v[Y] = _y;
+	v[0] = _x;
+	v[1] = _y;
 }
 
-Vector2::Vector2(float xy[2]) 
+Vector2::Vector2(float xy[2])
 {
 	memcpy(v, xy, sizeof(v));
 }
@@ -49,10 +49,10 @@ Vector2 Vector2::newBySizeAngle(float size, float radians)
     return Vector2(cos(radians) * size, sin(radians) * size);
 }
 
-Vector2& Vector2::set(float _x, float _y)
-{	
-	v[X] = _x;
-	v[Y] = _y;
+Vector2& Vector2::set(float x, float y)
+{
+	v[0] = x;
+	v[1] = y;
 	return *this;
 }
 
@@ -77,21 +77,17 @@ float Vector2::size() const
 
 float Vector2::angle() const
 {
-	return atan2f(v[Y],v[X]);
+	return atan2f(y(),x());
 }
 
-Vector2& Vector2::rotate(float radians) 
+Vector2& Vector2::rotate(float radians)
 {
 	float s = sin(radians);
     float c = cos(radians);
-
-    float newX = v[X] * c - v[Y] * s;
-    float newY = v[X] * s + v[Y] * c;
-
-    v[X] = newX;
-    v[Y] = newY;
-
-    return *this;
+	return set(
+		x() * c - y() * s,
+		x() * s + y() * c
+	);
 }
 
 Vector2& Vector2::normalize()
@@ -107,33 +103,33 @@ Vector2& Vector2::resize(float size)
 
 Vector2& Vector2::operator += (const Vector2& other)
 {
-	for (int i = 0; i < dim(); ++i) 
+	for (int i = 0; i < dim(); ++i)
 		v[i] += other[i];
     return *this;
 }
 
 Vector2& Vector2::operator -= (const Vector2& other)
 {
-	for (int i = 0; i < dim(); ++i) 
+	for (int i = 0; i < dim(); ++i)
 		v[i] -= other[i];
 	return *this;
 }
 
 Vector2& Vector2::operator *= (float c)
 {
-	for (int i = 0; i < dim(); ++i) 
+	for (int i = 0; i < dim(); ++i)
 		v[i] *= c;
 	return *this;
 }
 
 Vector2& Vector2::operator /= (float c)
-{	
+{
     return *this *= (1.0f / c);
 }
 
 Vector2 Vector2::operator -(void) const
 {
-	return Vector2(-v[X], -v[Y]);
+	return Vector2(-x(), -y());
 }
 
 Vector2 Vector2::operator +(const Vector2& other) const
@@ -166,7 +162,7 @@ bool Vector2::operator ==(const Vector2& other) const
 	for (int i = 0; i < dim(); ++i)
 		if (!equals(v[i], other[i]))
 			return false;
-	return true;	
+	return true;
 }
 
 bool Vector2::operator !=(const Vector2& other) const
@@ -178,7 +174,7 @@ float Vector2::dot(const Vector2& other) const
 {
 	float dotResult = 0.0f;
 	for (int i = 0; i < dim(); ++i)
-		dotResult += v[i] * other[i];    
+		dotResult += v[i] * other[i];
 	return dotResult;
 }
 
@@ -195,7 +191,13 @@ bool Vector2::isZero() const
 	return true;
 }
 
+void Vector2::swap(Vector2& other)
+{
+	for (int i = 0; i < dim(); ++i)
+		std::swap(v[i], other.v[i]);
+}
+
 std::ostream& fun::math::operator<<(std::ostream& output, const Vector2& p)
 {
-	return output << "(" << p[X] << "," << p[Y] << ")";
+	return output << "(" << p.x() << "," << p.y() << ")";
 }

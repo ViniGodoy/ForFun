@@ -2,19 +2,19 @@
 *
 * COPYRIGHT Vinícius G. Mendonça ALL RIGHTS RESERVED.
 *
-* This software cannot be copied, stored, distributed without  
+* This software cannot be copied, stored, distributed without
 * Vinícius G.Mendonça prior authorization.
 *
-* This file was made available on https://github.com/ViniGodoy/ForFun and it 
-* is free to be restributed or used under Creative Commons license 2.5 br: 
+* This file was made available on https://github.com/ViniGodoy/ForFun and it
+* is free to be restributed or used under Creative Commons license 2.5 br:
 * http://creativecommons.org/licenses/by-sa/2.5/br/
 *
 *******************************************************************************
-* Este software nao pode ser copiado, armazenado, distribuido sem autorização 
+* Este software nao pode ser copiado, armazenado, distribuido sem autorização
 * a priori de Vinícius G. Mendonça
 *
-* Este arquivo foi disponibilizado no site https://github.com/ViniGodoy/ForFun 
-* e esta livre para distribuição seguindo a licença Creative Commons 2.5 br: 
+* Este arquivo foi disponibilizado no site https://github.com/ViniGodoy/ForFun
+* e esta livre para distribuição seguindo a licença Creative Commons 2.5 br:
 * http://creativecommons.org/licenses/by-sa/2.5/br/
 *
 ******************************************************************************/
@@ -27,16 +27,16 @@ using namespace fun::math;
 Vector3 rh::transform2d(const Matrix3& matrix, Vector3& vector)
 {
 	return Vector3(
-		vector[X] * matrix(0,0) + vector[Y] * matrix(0,1) + vector[Z] * matrix(0,2),
-		vector[X] * matrix(1,0) + vector[Y] * matrix(1,1) + vector[Z] * matrix(1,2),
-		vector[X] * matrix(2,0) + vector[Y] * matrix(2,1) + vector[Z] * matrix(2,2));
+		vector.x() * matrix(0,0) + vector.y() * matrix(0,1) + vector.z() * matrix(0,2),
+		vector.x() * matrix(1,0) + vector.y() * matrix(1,1) + vector.z() * matrix(1,2),
+		vector.x() * matrix(2,0) + vector.y() * matrix(2,1) + vector.z() * matrix(2,2));
 }
 
 Vector2 rh::transform2d(const Matrix3& matrix, Vector2& vector, float z)
 {
 	return Vector2(
-		vector[X] * matrix(0,0) + vector[Y] * matrix(0,1) + z * matrix(0,2),
-		vector[X] * matrix(1,0) + vector[Y] * matrix(1,1) + z * matrix(1,2));
+		vector.x() * matrix(0,0) + vector.y() * matrix(0,1) + z * matrix(0,2),
+		vector.x() * matrix(1,0) + vector.y() * matrix(1,1) + z * matrix(1,2));
 }
 
 Matrix3 rh::newRotation2d(float radians)
@@ -73,16 +73,16 @@ Matrix3 rh::newTranslation2d(float x, float y)
 Vector3 lh::transform2d(const Matrix3& matrix, Vector3& vector)
 {
 	return Vector3(
-		matrix(0,0) * vector[X] + matrix(0,1) * vector[Y] + matrix(0,2) * vector[Z],
-		matrix(1,0) * vector[X] + matrix(1,1) * vector[Y] + matrix(1,2) * vector[Z],
-		matrix(2,0) * vector[X] + matrix(2,1) * vector[Y] + matrix(2,2) * vector[Z]);
+		matrix(0,0) * vector.x() + matrix(0,1) * vector.y() + matrix(0,2) * vector.z(),
+		matrix(1,0) * vector.x() + matrix(1,1) * vector.y() + matrix(1,2) * vector.z(),
+		matrix(2,0) * vector.x() + matrix(2,1) * vector.y() + matrix(2,2) * vector.z());
 }
 
 Vector2 lh::transform2d(const Matrix3& matrix, Vector2& vector, float z)
 {
 	return Vector2(
-		matrix(0,0) * vector[X] + matrix(0,1) * vector[Y] + matrix(0,2) * z,
-		matrix(1,0) * vector[X] + matrix(1,1) * vector[Y] + matrix(1,2) * z);
+		matrix(0,0) * vector.x() + matrix(0,1) * vector.y() + matrix(0,2) * z,
+		matrix(1,0) * vector.x() + matrix(1,1) * vector.y() + matrix(1,2) * z);
 }
 
 Matrix3 lh::newRotation2d(float radians)

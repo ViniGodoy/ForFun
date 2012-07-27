@@ -31,16 +31,6 @@ namespace math {
 	static const float FLOAT_DELTA = 0.00001f;
 	static const float DOUBLE_DELTA =  0.00000000000001f;
 
-	static const int X = 0;
-	static const int Y = 1;
-	static const int Z = 2;
-	static const int W = 3;
-
-	static const int R = 0;
-	static const int G = 1;
-	static const int B = 2;
-	static const int A = 3;
-
 	inline double toDegrees(double angrad)
 	{
 		return angrad * ONE_DEGREE;

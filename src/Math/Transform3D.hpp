@@ -28,8 +28,8 @@
 namespace fun {
 namespace math {
 	namespace rh {
-		Vector4 transform3d(const Matrix4& matrix, Vector4& vector);
-		Vector3 transform3d(const Matrix4& matrix, Vector3& vector, float w=1.0f);
+		Vector4 transform3d(const Matrix4& matrix, const Vector4& vector);
+		Vector3 transform3d(const Matrix4& matrix, const Vector3& vector, float w=1.0f);
 
 		/**
 		* Creates a right hand counter-clockwise rotation affine transformation
@@ -70,7 +70,7 @@ namespace math {
 
 		inline Matrix4 newTranslation3d(const Vector3& pos)
 		{
-			return newTranslation3d(pos[X], pos[Y], pos[Z]);
+			return newTranslation3d(pos.x(), pos.y(), pos.z());
 		}
 
 		/**
@@ -91,8 +91,8 @@ namespace math {
 
 	namespace lh
 	{
-		Vector4 transform3d(const Matrix4& matrix, Vector4& vector);
-		Vector3 transform3d(const Matrix4& matrix, Vector3& vector, float w=1.0f);
+		Vector4 transform3d(const Matrix4& matrix, const Vector4& vector);
+		Vector3 transform3d(const Matrix4& matrix, const Vector3& vector, float w=1.0f);
 
 		/**
 		* Creates a left hand counter-clockwise rotation affine transformation
@@ -136,7 +136,7 @@ namespace math {
 
 		inline Matrix4 newTranslation3d(const Vector3& pos)
 		{
-			return lh::newTranslation3d(pos[X], pos[Y], pos[Z]);
+			return lh::newTranslation3d(pos.x(), pos.y(), pos.z());
 		}
 
 		/**

@@ -58,7 +58,7 @@ namespace math {
 
 		inline Matrix3 newTranslation2d(const Vector2& pos)
 		{
-			return newTranslation2d(pos[X], pos[Y]);
+			return newTranslation2d(pos.x(), pos.y());
 		}
 	}
 
@@ -95,7 +95,7 @@ namespace math {
 
 		inline Matrix3 newTranslation2d(const Vector2& pos)
 		{
-			return lh::newTranslation2d(pos[X], pos[Y]);
+			return lh::newTranslation2d(pos.x(), pos.y());
 		}
 	}
 }}

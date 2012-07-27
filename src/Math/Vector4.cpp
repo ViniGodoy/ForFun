@@ -2,19 +2,19 @@
 *
 * COPYRIGHT Vinícius G. Mendonça ALL RIGHTS RESERVED.
 *
-* This software cannot be copied, stored, distributed without  
+* This software cannot be copied, stored, distributed without
 * Vinícius G.Mendonça prior authorization.
 *
-* This file was made available on https://github.com/ViniGodoy/ForFun and it 
-* is free to be restributed or used under Creative Commons license 2.5 br: 
+* This file was made available on https://github.com/ViniGodoy/ForFun and it
+* is free to be restributed or used under Creative Commons license 2.5 br:
 * http://creativecommons.org/licenses/by-sa/2.5/br/
 *
 *******************************************************************************
-* Este software nao pode ser copiado, armazenado, distribuido sem autorização 
+* Este software nao pode ser copiado, armazenado, distribuido sem autorização
 * a priori de Vinícius G. Mendonça
 *
-* Este arquivo foi disponibilizado no site https://github.com/ViniGodoy/ForFun 
-* e esta livre para distribuição seguindo a licença Creative Commons 2.5 br: 
+* Este arquivo foi disponibilizado no site https://github.com/ViniGodoy/ForFun
+* e esta livre para distribuição seguindo a licença Creative Commons 2.5 br:
 * http://creativecommons.org/licenses/by-sa/2.5/br/
 *
 ******************************************************************************/
@@ -26,18 +26,15 @@
 
 using namespace fun::math;
 
-Vector4::Vector4() 
+Vector4::Vector4()
 {
 	for (int i = 0; i < dim(); ++i)
 		v[i] = 0.0f;
 }
 
-Vector4::Vector4(float _x, float _y, float _z, float _w) 
+Vector4::Vector4(float x, float y, float z, float w)
 {
-	v[X] = _x;
-	v[Y] = _y;
-	v[Z] = _z;
-	v[W] = _w;
+	set(x, y, z, w);
 }
 
 Vector4::Vector4(float xyz[4])
@@ -45,12 +42,12 @@ Vector4::Vector4(float xyz[4])
 	memcpy(v, xyz, sizeof(v));
 }
 
-Vector4& Vector4::set(float _x, float _y, float _z, float _w)
+Vector4& Vector4::set(float x, float y, float z, float w)
 {
-	v[X] = _x;
-	v[Y] = _y;
-	v[Z] = _z;
-	v[W] = _w;
+	v[0] = x;
+	v[1] = y;
+	v[2] = z;
+	v[3] = w;
     return *this;
 }
 
@@ -62,28 +59,28 @@ Vector4& Vector4::set(const float xyz[4])
 
 Vector4& Vector4::operator +=(const Vector4& other)
 {
-	for (int i = 0; i < dim(); ++i) 
+	for (int i = 0; i < dim(); ++i)
 		v[i] += other[i];
     return *this;
 }
 
 Vector4& Vector4::operator -=(const Vector4& other)
 {
-	for (int i = 0; i < dim(); ++i) 
+	for (int i = 0; i < dim(); ++i)
 		v[i] -= other[i];
     return *this;
 }
 
 Vector4& Vector4::operator *=(float c)
 {
-	for (int i = 0; i < dim(); ++i) 
+	for (int i = 0; i < dim(); ++i)
 		v[i] *= c;
     return *this;
 }
 
 Vector4& Vector4::operator *=(const Vector4& other)
 {
-	for (int i = 0; i < dim(); ++i) 
+	for (int i = 0; i < dim(); ++i)
 		v[i] *= other[i];
     return *this;
 }
@@ -95,7 +92,7 @@ Vector4& Vector4::operator /=(float c)
 
 Vector4 Vector4::operator -(void) const
 {
-    return (Vector4(-v[X], -v[Y], -v[Z]));
+    return (Vector4(-x(), -y(), -z(), -w()));
 }
 
 Vector4 Vector4::operator +(const Vector4& other) const
@@ -181,7 +178,21 @@ Vector4& Vector4::normalize()
 	return (s == 0) ? *this : (*this /= sqrtf(s));
 }
 
+void Vector4::swap(Vector4& other)
+{
+	for (int i = 0; i < dim(); ++i)
+		std::swap(v[i], other.v[i]);
+}
+
 std::ostream& fun::math::operator<<(std::ostream& output, const Vector4& p)
 {
-	return output << "(" << p[X] << "," << p[Y] << "," << p[Z] << "," << p[W] << ")";	
+	return output << "(" << p.x() << "," << p.y() << "," << p.z() << "," << p.w() << ")";
+}
+
+Vector4 fun::math::saturate(const Vector4& vector)
+{
+	Vector4 v;
+	for (int i = 0; i < vector.dim(); ++i)
+		v[i] = saturate(vector[i]);
+	return v;
 }

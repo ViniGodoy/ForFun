@@ -41,7 +41,7 @@ namespace math {
 	{
 		float v[2];
 
-		public:
+		public:			
 			/** Builds a NULL vector */
 			Vector2();
 			/** Builds a vector based in it's x and y components */
@@ -53,6 +53,18 @@ namespace math {
 			/** Builds a vector based in it's size (magnitude) and angle 
 			with x axis (counter-clockwise) */
 			static Vector2 newBySizeAngle(float size, float radians);
+
+			/** Gets the x coordinate */
+			inline float x() const { return v[0]; }
+
+			/** Gets the y coordinate */
+			inline float y() const { return v[1]; }
+
+			/** Sets x coordinate */
+			inline void setX(float x) { v[0] = x; }
+
+			/** Sets y coordinate */
+			inline void setY(float y) { v[1] = y; }
 
 			/** Changes the x and y values */
 			Vector2& set(float x, float y);
@@ -133,6 +145,11 @@ namespace math {
 			 * Return his vector dimension, 2
 			 */
 			inline int dim() const { return 2; }
+
+			/**
+			 * Swaps the contents of both vectors
+			 */
+			void swap(Vector2& other);
 	};
 
 	Vector2 operator*(float scalar, const Vector2& vector);
@@ -171,7 +188,7 @@ namespace math {
 	*/
 	inline Vector2 perp(const Vector2& v)
 	{
-		return Vector2(-v[Y], v[X]);
+		return Vector2(-v.y(), v.x());
 	}
 
 	/**
@@ -235,4 +252,13 @@ namespace math {
 
 	std::ostream& operator<<(std::ostream& output, const Vector2& p);
 }}
+
+namespace std
+{
+	template<>
+	inline void swap<fun::math::Vector2>(fun::math::Vector2& one, fun::math::Vector2& two)
+	{
+		one.swap(two);
+	}
+}
 #endif

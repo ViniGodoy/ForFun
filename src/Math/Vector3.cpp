@@ -2,19 +2,19 @@
 *
 * COPYRIGHT Vinícius G. Mendonça ALL RIGHTS RESERVED.
 *
-* This software cannot be copied, stored, distributed without  
+* This software cannot be copied, stored, distributed without
 * Vinícius G.Mendonça prior authorization.
 *
-* This file was made available on https://github.com/ViniGodoy/ForFun and it 
-* is free to be restributed or used under Creative Commons license 2.5 br: 
+* This file was made available on https://github.com/ViniGodoy/ForFun and it
+* is free to be restributed or used under Creative Commons license 2.5 br:
 * http://creativecommons.org/licenses/by-sa/2.5/br/
 *
 *******************************************************************************
-* Este software nao pode ser copiado, armazenado, distribuido sem autorização 
+* Este software nao pode ser copiado, armazenado, distribuido sem autorização
 * a priori de Vinícius G. Mendonça
 *
-* Este arquivo foi disponibilizado no site https://github.com/ViniGodoy/ForFun 
-* e esta livre para distribuição seguindo a licença Creative Commons 2.5 br: 
+* Este arquivo foi disponibilizado no site https://github.com/ViniGodoy/ForFun
+* e esta livre para distribuição seguindo a licença Creative Commons 2.5 br:
 * http://creativecommons.org/licenses/by-sa/2.5/br/
 *
 ******************************************************************************/
@@ -27,17 +27,15 @@
 
 using namespace fun::math;
 
-Vector3::Vector3() 
+Vector3::Vector3()
 {
 	for (int i = 0; i < dim(); ++i)
 		v[i] = 0.0f;
 }
 
-Vector3::Vector3(float _x, float _y, float _z) 
+Vector3::Vector3(float x, float y, float z)
 {
-	v[X] = _x;
-	v[Y] = _y;
-	v[Z] = _z;
+	set(x,y,z);
 }
 
 Vector3::Vector3(float xyz[3])
@@ -45,11 +43,11 @@ Vector3::Vector3(float xyz[3])
 	memcpy(v, xyz, sizeof(v));
 }
 
-Vector3& Vector3::set(float _x, float _y, float _z)
+Vector3& Vector3::set(float x, float y, float z)
 {
-	v[X] = _x;
-	v[Y] = _y;
-	v[Z] = _z;
+	v[0] = x;
+	v[1] = y;
+	v[2] = z;
     return *this;
 }
 
@@ -61,28 +59,28 @@ Vector3& Vector3::set(const float xyz[3])
 
 Vector3& Vector3::operator +=(const Vector3& other)
 {
-	for (int i = 0; i < dim(); ++i) 
+	for (int i = 0; i < dim(); ++i)
 		v[i] += other[i];
     return *this;
 }
 
 Vector3& Vector3::operator -=(const Vector3& other)
 {
-	for (int i = 0; i < dim(); ++i) 
+	for (int i = 0; i < dim(); ++i)
 		v[i] -= other[i];
     return *this;
 }
 
 Vector3& Vector3::operator *=(float c)
 {
-	for (int i = 0; i < dim(); ++i) 
+	for (int i = 0; i < dim(); ++i)
 		v[i] *= c;
     return *this;
 }
 
 Vector3& Vector3::operator *=(const Vector3& other)
 {
-	for (int i = 0; i < dim(); ++i) 
+	for (int i = 0; i < dim(); ++i)
 		v[i] *= other[i];
     return *this;
 }
@@ -94,7 +92,7 @@ Vector3& Vector3::operator /=(float c)
 
 Vector3 Vector3::operator -(void) const
 {
-    return (Vector3(-v[X], -v[Y], -v[Z]));
+    return (Vector3(-x(), -y(), -z()));
 }
 
 Vector3 Vector3::operator +(const Vector3& other) const
@@ -171,16 +169,11 @@ bool Vector3::isZero() const
 
 Vector3& Vector3::cross(const Vector3& other)
 {
-    float newX, newY;
-
-    newX = v[Y] * other[Z] - v[Z] * other[Y];
-    newY = v[Z] * other[X] - v[X] * other[Z];
-    v[Z] = v[X] * other[Y] - v[Y] * other[X];
-
-    v[X] = newX;
-    v[Y] = newY;
-
-    return *this;
+	return set(
+		y() * other.z() - z() * other.y(),
+		z() * other.x() - x() * other.z(),
+		x() * other.y() - y() * other.x()
+	);
 }
 
 Vector3& Vector3::resize(float size)
@@ -214,26 +207,36 @@ Vector3& Vector3::rotateAxis(float angle, const Vector3& axis)
     float c = cosf(angle);
     float k = 1.0F - c;
 
-    float nx = v[X] * (c + k * axis[X] * axis[X]) +
-               v[Y] * (k * axis[X] * axis[Y] - s * axis[Z]) +
-               v[Z] * (k * axis[X] * axis[Z] + s * axis[Y]);
+    float nx = x() * (c + k * axis.x() * axis.x()) +
+               y() * (k * axis.x() * axis.y() - s * axis.z()) +
+               z() * (k * axis.x() * axis.z() + s * axis.y());
 
-    float ny = v[X] * (k * axis[X] * axis[Y] + s * axis[Z]) +
-               v[Y] * (c + k * axis[Y] * axis[Y]) +
-               v[Z] * (k * axis[Y] * axis[Z] - s * axis[X]);
+    float ny = x() * (k * axis.x() * axis.y() + s * axis.z()) +
+               y() * (c + k * axis.y() * axis.y()) +
+               z() * (k * axis.y() * axis.z() - s * axis.x());
 
-    float nz = v[X] * (k * axis[X] * axis[Z] - s * axis[Y]) +
-               v[Y] * (k * axis[Y] * axis[Z] + s * axis[X]) +
-               v[Z] * (c + k * axis[Z] * axis[Z]);
+    float nz = x() * (k * axis.x() * axis.z() - s * axis.y()) +
+               y() * (k * axis.y() * axis.z() + s * axis.x()) +
+               z() * (c + k * axis.z() * axis.z());
 
-    v[X] = nx;
-    v[Y] = ny;
-    v[Z] = nz;
+    return set(nx, ny, nz);
+}
 
-    return *this;
+void Vector3::swap(Vector3& other)
+{
+	for (int i = 0; i < dim(); ++i)
+		std::swap(v[i], other.v[i]);
 }
 
 std::ostream& fun::math::operator<<(std::ostream& output, const Vector3& p)
 {
-	return output << "(" << p[X] << "," << p[Y] << "," << p[Z] << ")";	
+	return output << "(" << p.x() << "," << p.y() << "," << p.z() << ")";
+}
+
+Vector3 saturate(const Vector3& color)
+{
+	Vector3 v;
+	for (int i = 0; i < color.dim(); ++i)
+		v[i] = saturate(color[i]);
+	return v;
 }

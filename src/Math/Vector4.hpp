@@ -48,6 +48,54 @@ namespace math {
 			with x axis (counter-clockwise) */
 			static Vector4 newBySizeAngle(float size, float radians);
 
+			/** Gets the x coordinate */
+			inline float x() const { return v[0]; }			
+
+			/** Gets the red color component */
+			inline float r() const { return v[0]; }			
+
+			/** Gets the y coordinate */
+			inline float y() const { return v[1]; }
+
+			/** Gets the green color component */
+			inline float g() const { return v[1]; }			
+
+			/** Gets the z coordinate */
+			inline float z() const { return v[2]; }
+
+			/** Gets the blue color component */
+			inline float b() const { return v[2]; }
+
+			/** Gets the w coordinate */
+			inline float w() const { return v[3]; }
+
+			/** Gets the alpha color component */
+			inline float a() const { return v[3]; }
+
+			/** Sets the x coordinate */
+			inline void setX(float x) { v[0] = x; }
+
+			/** Sets the red color component */
+			inline void setR(float r) { v[0] = r; }
+
+			/** Sets the y coordinate */
+			inline void setY(float y) { v[1] = y; }
+
+			/** Sets the green color component */
+			inline void setG(float g) { v[1] = g; }
+
+			/** Sets z coordinate */
+			inline void setZ(float z) { v[2] = z; }
+
+			/** Sets the blue color component */
+			inline void setB(float b) { v[2] = b; }
+
+			/** Sets w coordinate */
+			inline void setW(float w) { v[3] = w; }
+
+			/** Sets the alpha color component */
+			inline void setA(float a) { v[3] = a; }
+
 			/** Changes the x and y values */
 			Vector4& set(float x, float y, float z, float w);
 
@@ -119,6 +167,11 @@ namespace math {
 			 * Return his vector dimension, 4
 			 */
 			inline int dim() const { return 4; }
+
+			/**
+			 * Swaps the contents of both vectors
+			 */
+			void swap(Vector4& other);
 	};
 
 	Vector4 operator*(float scalar, const Vector4& vector);
@@ -182,5 +235,19 @@ namespace math {
 	}
 
 	std::ostream& operator<<(std::ostream& output, const Vector4& p);
+
+	/** 
+    * Guarantee that all color components will be in 0-1 range.
+    */
+	Vector4 saturate(const Vector4& color);
 }}
+
+namespace std
+{
+	template<>
+	inline void swap<fun::math::Vector4>(fun::math::Vector4& one, fun::math::Vector4& two)
+	{
+		one.swap(two);
+	}
+}
 #endif

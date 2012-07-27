@@ -60,6 +60,43 @@ namespace math {
 			*/
 			explicit Vector3(float xyz[3]);
 
+			/** Gets the x coordinate */
+			inline float x() const { return v[0]; }			
+
+			/** Gets the red color component */
+			inline float r() const { return v[0]; }			
+
+			/** Gets the y coordinate */
+			inline float y() const { return v[1]; }
+
+			/** Gets the green color component */
+			inline float g() const { return v[1]; }			
+
+			/** Gets the z coordinate */
+			inline float z() const { return v[2]; }
+
+			/** Gets the blue color component */
+			inline float b() const { return v[2]; }
+
+			/** Sets the x coordinate */
+			inline void setX(float x) { v[0] = x; }
+
+			/** Sets the red color component */
+			inline void setR(float r) { v[0] = r; }
+
+			/** Sets the y coordinate */
+			inline void setY(float y) { v[1] = y; }
+
+			/** Sets the green color component */
+			inline void setG(float g) { v[1] = g; }
+
+			/** Sets z coordinate */
+			inline void setZ(float z) { v[2] = z; }
+
+			/** Sets the blue color component */
+			inline void setB(float b) { v[2] = b; }
+
+
 			/**
 				Sets the x, y and z coordinates in one single operation.
 
@@ -171,19 +208,19 @@ namespace math {
 				@return This own vector is returned, for invocation chaning.
 			*/
 			
-			inline Vector3& rotateX(float radians) { return rotateTwoAxis(Y, Z, radians); }
+			inline Vector3& rotateX(float radians) { return rotateTwoAxis(1, 2, radians); }
 
 			/**
 				Rotates this vector around the y axis.
 				@return This own vector is returned, for invocation chaning.
 			*/
-			inline Vector3& rotateY(float radians) { return rotateTwoAxis(Z, X, radians); }
+			inline Vector3& rotateY(float radians) { return rotateTwoAxis(2, 0, radians); }
 
 			/**
 				Rotates this vector around the z axis.
 				@return This own vector is returned, for invocation chaning.
 			*/
-			inline Vector3& rotateZ(float radians) { return rotateTwoAxis(X, Y, radians); }
+			inline Vector3& rotateZ(float radians) { return rotateTwoAxis(0, 1, radians); }
 
 			/**
 				Rotates this vector around the given axis.
@@ -205,6 +242,11 @@ namespace math {
 			 * Return his vector dimension, 3
 			 */
 			inline int dim() const { return 3; }
+
+			/**
+			 * Swaps the contents of both vectors
+			 */
+			void swap(Vector3& other);
 		};
 
 		Vector3 operator*(float scalar, const Vector3& vector);
@@ -276,5 +318,19 @@ namespace math {
 		}
 
 		std::ostream& operator<<(std::ostream& output, const Vector3& p);
+
+		/** 
+		* Guarantee that all color components will be in 0-1 range.
+		*/
+		Vector3 saturate(const Vector3& color);
 }}
+
+namespace std
+{
+	template<>
+	inline void swap<fun::math::Vector3>(fun::math::Vector3& one, fun::math::Vector3& two)
+	{
+		one.swap(two);
+	}
+}
 #endif // Vector3_H_INCLUDED

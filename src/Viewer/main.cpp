@@ -20,12 +20,15 @@
 ******************************************************************************/
 
 #include "..\Renderer\SwapChain.hpp"
+#include "..\Renderer\Color.hpp"
+
 #include <time.h>
 
 #include <SDL.h>
 #include <iostream>
 
 using namespace fun::render;
+using namespace fun::math;
 using namespace std;
 
 const int WIDTH = 800;
@@ -35,20 +38,20 @@ const int DELAY_BETWEEN_TESTS = 500;
 
 void drawTraces(SwapChain& sw)
 {
-	sw.backBuffer().drawLine(400,300,Color(0,0,0),500,599,Color(255,255,255));
-	sw.backBuffer().drawLine(400,300,Color(0,0,0),300,599,Color(255,255,255));
-	sw.backBuffer().drawLine(400,300,Color(0,0,0),500,0,Color(255,255,255));
-	sw.backBuffer().drawLine(400,300,Color(0,0,0),300,0,Color(255,255,255));
+	sw.backBuffer().drawLine(400,300,BLACK,500,599,WHITE);
+	sw.backBuffer().drawLine(400,300,BLACK,300,599,WHITE);
+	sw.backBuffer().drawLine(400,300,BLACK,500,0,WHITE);
+	sw.backBuffer().drawLine(400,300,BLACK,300,0,WHITE);
 
-	sw.backBuffer().drawLine(400,300,Color(0,0,0),0,599,Color(255,255,255));
-	sw.backBuffer().drawLine(400,300,Color(0,0,0),799,599,Color(255,255,255));
-	sw.backBuffer().drawLine(400,300,Color(0,0,0),0,0,Color(255,255,255));
-	sw.backBuffer().drawLine(400,300,Color(0,0,0),799,0,Color(255,255,255));
+	sw.backBuffer().drawLine(400,300,BLACK,0,599,WHITE);
+	sw.backBuffer().drawLine(400,300,BLACK,799,599,WHITE);
+	sw.backBuffer().drawLine(400,300,BLACK,0,0,WHITE);
+	sw.backBuffer().drawLine(400,300,BLACK,799,0,WHITE);
 
-	sw.backBuffer().drawLine(400,300,Color(0,0,0),0,200,Color(255,255,255));
-	sw.backBuffer().drawLine(400,300,Color(0,0,0),799,200,Color(255,255,255));
-	sw.backBuffer().drawLine(400,300,Color(0,0,0),0,400,Color(255,255,255));
-	sw.backBuffer().drawLine(400,300,Color(0,0,0),799,400,Color(255,255,255));
+	sw.backBuffer().drawLine(400,300,BLACK,0,200,WHITE);
+	sw.backBuffer().drawLine(400,300,BLACK,799,200,WHITE);
+	sw.backBuffer().drawLine(400,300,BLACK,0,400,WHITE);
+	sw.backBuffer().drawLine(400,300,BLACK,799,400,WHITE);
 	sw.flip();
 }
 void drawPoints(SwapChain& sw)
@@ -63,16 +66,14 @@ void drawPoints(SwapChain& sw)
 	int lastY = y[0];
 
 	long before = SDL_GetTicks();
-	int r = 50 + rand() % 205;
-	int g = 50 + rand() % 205;
-	int b = 50 + rand() % 205;
+	int color = rand() % 8;
 
 	while (time < 1000) {
 		lastX = (lastX + 1) % WIDTH;
 		if (lastX == 0)
 			lastY = (lastY + 1) % HEIGHT;
 
-		sw.backBuffer().set(lastX, lastY, Color(r, g, b));
+		sw.backBuffer().set(lastX, lastY, PURE_COLORS[color]);
 		time = SDL_GetTicks() - before;
 		points++;
 	}
@@ -93,7 +94,7 @@ void drawFlatLines(SwapChain& sw)
 		int px = static_cast<unsigned>(x) % WIDTH;
 		int py = static_cast<unsigned>(y) % HEIGHT;
 		sw.backBuffer().drawLine(px, py, WIDTH-px-1, HEIGHT-py-1,
-			Color(px & 0xFF, py & 0xFF, (px+py)&0xFF));
+			PURE_COLORS[((py+px)%7)+1]);
 		x += 0.1f;
 		y += x;
 		lines++;
@@ -116,8 +117,8 @@ void drawLines(SwapChain& sw)
 		int px = static_cast<unsigned>(x) % WIDTH;
 		int py = static_cast<unsigned>(y) % HEIGHT;
 		sw.backBuffer().drawLine(
-			px, py, Color(px & 0xFF, py & 0xFF, (px+py)&0xFF),
-			WIDTH-px-1, HEIGHT-py-1, Color(255, 0, 0));
+			px, py, PURE_COLORS[((py+px)%7)+1],
+			WIDTH-px-1, HEIGHT-py-1, PURE_COLORS[(px%7)+1]);
 		x += 0.1f;
 		y += x;
 		lines++;
@@ -140,7 +141,7 @@ void drawFlatTriangles(SwapChain& sw)
 			400,0,
 			799,599,
 			0,499,
-			Color(tone, tone, tone));
+			PURE_COLORS[(time % 7)+1]);
 		count++;
 		time = SDL_GetTicks() - before;
 	}
@@ -156,11 +157,10 @@ void drawTriangles(SwapChain& sw)
 
 	while (time < 1000)
 	{
-		unsigned char tone = static_cast<unsigned char>(time % 255);
 		sw.backBuffer().drawTriangle(
-			400,0, Color(tone,0,0),
-			799,499, Color(0,tone,0),
-			0,599, Color(0,0,tone));
+			400,0, RED,
+			799,499, GREEN,
+			0,599, BLUE);
 		count++;
 		time = SDL_GetTicks() - before;
 	}
@@ -173,7 +173,7 @@ int main(int argc, char* argv[])
 	srand(time(NULL));
 	SwapChain sw(WIDTH,HEIGHT, false);
 
-	drawTraces(sw);
+	/*drawTraces(sw);
 	SDL_Delay(DELAY_BETWEEN_TESTS);
 
 	for (int i = 0; i < 5; i++)
@@ -181,13 +181,14 @@ int main(int argc, char* argv[])
 		drawPoints(sw);
 		SDL_Delay(DELAY_BETWEEN_TESTS);
 	}
-
+	*/
 	for (int i = 0; i < 5; i++)
 	{
 		drawLines(sw);
 		SDL_Delay(DELAY_BETWEEN_TESTS);
 	}
 
+	/*
 	for (int i = 0; i < 5; i++)
 	{
 		drawFlatLines(sw);
@@ -206,7 +207,7 @@ int main(int argc, char* argv[])
 		SDL_Delay(DELAY_BETWEEN_TESTS);
 	}
 
-	SDL_Delay(3000);
+	SDL_Delay(3000);*/
 
 	return 0;
 }

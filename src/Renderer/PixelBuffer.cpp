@@ -26,7 +26,6 @@
 #include "../Math/Vector4.hpp"
 
 #include <SDL.h>
-
 #include <algorithm>
 
 using namespace fun::render;
@@ -63,30 +62,11 @@ PixelBuffer& PixelBuffer::operator =(const PixelBuffer& other)
 	return *this;
 }
 
-const unsigned int& PixelBuffer::operator() (int x, int y) const
+const Vector4 PixelBuffer::operator() (int x, int y) const
 {
-	return ((Uint32*)surface->pixels)[(y * surface->w) + x];
-}
+	unsigned pixelColor = ((Uint32*)surface->pixels)[(y * surface->w) + x];
 
-unsigned int& PixelBuffer::operator() (int x, int y)
-{
-	return ((Uint32*)surface->pixels)[(y * surface->w) + x];
-}
-
-unsigned PixelBuffer::colorToUnsigned(const Color& color) const
-{
-	unsigned finalColor = (color.a >> surface->format->Aloss) << surface->format->Ashift;
-	finalColor |= (color.r >> surface->format->Rloss) << surface->format->Rshift;
-	finalColor |= (color.g >> surface->format->Gloss) << surface->format->Gshift;
-	finalColor |= (color.b >> surface->format->Bloss) << surface->format->Bshift;
-	return finalColor;
-}
-
-Color PixelBuffer::unsignedToColor(const unsigned& pixelColor) const
-{
-	Color color(0U);
 	unsigned int temp = 0;
-	unsigned int pixel = *((Uint32*)surface->pixels);
 
 	SDL_PixelFormat* fmt = surface->format;
 
@@ -94,49 +74,67 @@ Color PixelBuffer::unsignedToColor(const unsigned& pixelColor) const
 	temp = pixelColor & fmt->Rmask;  /* Isolate red component */
 	temp = temp >> fmt->Rshift; /* Shift it down to 8-bit */
 	temp = temp << fmt->Rloss;  /* Expand to a full 8-bit number */
-	color.r = static_cast<unsigned char>(temp);
+	float r = static_cast<unsigned char>(temp) / 255.0f;
 
 	/* Get Green component */
 	temp = pixelColor & fmt->Gmask;  /* Isolate red component */
 	temp = temp >> fmt->Gshift; /* Shift it down to 8-bit */
 	temp = temp << fmt->Gloss;  /* Expand to a full 8-bit number */
-	color.g = static_cast<unsigned char>(temp);
+	float g = static_cast<unsigned char>(temp) / 255.0f;
 
 	/* Get Blue component */
 	temp = pixelColor & fmt->Bmask;  /* Isolate red component */
 	temp = temp >> fmt->Bshift; /* Shift it down to 8-bit */
 	temp = temp << fmt->Bloss;  /* Expand to a full 8-bit number */
-	color.b = static_cast<unsigned char>(temp);
+	float b = static_cast<unsigned char>(temp) / 255.0f;
 
 	/* Get Alpha component */
 	temp = pixelColor & fmt->Amask;  /* Isolate red component */
 	temp = temp >> fmt->Ashift; /* Shift it down to 8-bit */
 	temp = temp << fmt->Aloss;  /* Expand to a full 8-bit number */
-	color.a = static_cast<unsigned char>(temp);
-	return color;
+	float a = static_cast<unsigned char>(temp) / 255.0f;
+	return Vector4(r, g, b, a);
+}
+
+PixelBuffer& PixelBuffer::set(int x, int y, const Vector4& color)
+{
+	unsigned char r = static_cast<unsigned char>(color.r() * 255);
+	unsigned char g = static_cast<unsigned char>(color.g() * 255);
+	unsigned char b = static_cast<unsigned char>(color.b() * 255);
+	unsigned char a = static_cast<unsigned char>(color.a() * 255);
+
+	unsigned finalColor = (a >> surface->format->Aloss) << surface->format->Ashift;
+	finalColor |= (r >> surface->format->Rloss) << surface->format->Rshift;
+	finalColor |= (g >> surface->format->Gloss) << surface->format->Gshift;
+	finalColor |= (b >> surface->format->Bloss) << surface->format->Bshift;
+
+	((Uint32*)surface->pixels)[(y * surface->w) + x] = finalColor;
+	return *this;
 }
 
 void PixelBuffer::drawLine(
-	int x0, int y0, Color color0,
-	int x1, int y1, Color color1)
+	int x0, int y0, const Vector4& c0,
+	int x1, int y1, const Vector4& c1)
 {
+	Vector4 color0(c0);
+	Vector4 color1(c1);
+
 	std::vector<Point> points;
 
 	if (bresenham(x0, y0, x1, y1, points))
 		std::swap(color0, color1);
 
-	if (color0.value == color1.value)
+	if (color0 == color1)
 		for (unsigned i = 0; i < points.size(); ++i)
-			(*this)(points[i].x, points[i].y) = colorToUnsigned(color0);
+			set(points[i].x, points[i].y, color0);
 	else
 	{
-		Vector4 colorStep =
-			(color1.toVector() - color0.toVector()) / static_cast<float>(points.size());
-		Vector4 color = color0.toVector();
+		Vector4 colorStep = (color1 - color0) / static_cast<float>(points.size());
+		Vector4 color(color0);
 
 		for (unsigned i = 0; i < points.size(); ++i)
 		{
-			set(points[i].x, points[i].y, Color(color));
+			set(points[i].x, points[i].y, color);
 			color += colorStep;
 		}
 	}
@@ -200,7 +198,7 @@ void calculateEdges(int x0, int y0,
 void PixelBuffer::drawTriangle(int x0, int y0,
 	int x1, int y1,
 	int x2, int y2,
-	Color color)
+	const Vector4& color)
 {
 	int miny, maxy;
 	int* minx, *maxx;
@@ -238,9 +236,9 @@ Vector3 baricentric(
 	* Draws a triangle
 	*/
 void PixelBuffer::drawTriangle(
-	int x0, int y0, Color color0,
-	int x1, int y1, Color color1,
-	int x2, int y2, Color color2)
+	int x0, int y0, const Vector4& color0,
+	int x1, int y1, const Vector4& color1,
+	int x2, int y2, const Vector4& color2)
 {
 	int miny, maxy;
 	int* minx, *maxx;
@@ -250,12 +248,10 @@ void PixelBuffer::drawTriangle(
 		for (int x = minx[y]; x <= maxx[y]; ++x)
 		{
 			Vector3 b = baricentric(x0, y0, x1, y1, x2, y2, x, y);
-			Color c(
-				static_cast<unsigned char>(color0.r*b[X]+color1.r*b[Y]+color2.r*b[Z]),
-				static_cast<unsigned char>(color0.g*b[X]+color1.g*b[Y]+color2.g*b[Z]),
-				static_cast<unsigned char>(color0.b*b[X]+color1.b*b[Y]+color2.b*b[Z]),
-				static_cast<unsigned char>(color0.a*b[X]+color1.a*b[Y]+color2.a*b[Z])
-			);
+			Vector4 c(color0);
+			c *= b.x();
+			c += b.y() * color1;
+			c += b.z() * color2;
 			set(x, y, c);
 		}
 

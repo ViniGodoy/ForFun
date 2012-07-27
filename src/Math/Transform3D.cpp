@@ -2,19 +2,19 @@
 *
 * COPYRIGHT Vinícius G. Mendonça ALL RIGHTS RESERVED.
 *
-* This software cannot be copied, stored, distributed without  
+* This software cannot be copied, stored, distributed without
 * Vinícius G.Mendonça prior authorization.
 *
-* This file was made available on https://github.com/ViniGodoy/ForFun and it 
-* is free to be restributed or used under Creative Commons license 2.5 br: 
+* This file was made available on https://github.com/ViniGodoy/ForFun and it
+* is free to be restributed or used under Creative Commons license 2.5 br:
 * http://creativecommons.org/licenses/by-sa/2.5/br/
 *
 *******************************************************************************
-* Este software nao pode ser copiado, armazenado, distribuido sem autorização 
+* Este software nao pode ser copiado, armazenado, distribuido sem autorização
 * a priori de Vinícius G. Mendonça
 *
-* Este arquivo foi disponibilizado no site https://github.com/ViniGodoy/ForFun 
-* e esta livre para distribuição seguindo a licença Creative Commons 2.5 br: 
+* Este arquivo foi disponibilizado no site https://github.com/ViniGodoy/ForFun
+* e esta livre para distribuição seguindo a licença Creative Commons 2.5 br:
 * http://creativecommons.org/licenses/by-sa/2.5/br/
 *
 ******************************************************************************/
@@ -24,21 +24,21 @@ using namespace fun::math;
 
 #pragma region Right hand
 
-Vector4 rh::transform3d(const Matrix4& matrix, Vector4& vector)
-{	
+Vector4 rh::transform3d(const Matrix4& matrix, const Vector4& vector)
+{
 	return Vector4(
-		vector[X] * matrix(0,0) + vector[Y] * matrix(0,1) + vector[Z] * matrix(0,2) + vector[W] * matrix(0,3),
-		vector[X] * matrix(1,0) + vector[Y] * matrix(1,1) + vector[Z] * matrix(1,2) + vector[W] * matrix(1,3),
-		vector[X] * matrix(2,0) + vector[Y] * matrix(2,1) + vector[Z] * matrix(2,2) + vector[W] * matrix(2,3),
-		vector[X] * matrix(3,0) + vector[Y] * matrix(3,1) + vector[Z] * matrix(3,2) + vector[W] * matrix(3,3));
+		vector.x() * matrix(0,0) + vector.y() * matrix(0,1) + vector.z() * matrix(0,2) + vector.w() * matrix(0,3),
+		vector.x() * matrix(1,0) + vector.y() * matrix(1,1) + vector.z() * matrix(1,2) + vector.w() * matrix(1,3),
+		vector.x() * matrix(2,0) + vector.y() * matrix(2,1) + vector.z() * matrix(2,2) + vector.w() * matrix(2,3),
+		vector.x() * matrix(3,0) + vector.y() * matrix(3,1) + vector.z() * matrix(3,2) + vector.w() * matrix(3,3));
 }
 
-Vector3 rh::transform3d(const Matrix4& matrix, Vector3& vector, float w)
+Vector3 rh::transform3d(const Matrix4& matrix, const Vector3& vector, float w)
 {
 	return Vector3(
-		vector[X] * matrix(0,0) + vector[Y] * matrix(0,1) + vector[Z] * matrix(0,2) + w * matrix(0,3),
-		vector[X] * matrix(1,0) + vector[Y] * matrix(1,1) + vector[Z] * matrix(1,2) + w * matrix(1,3),
-		vector[X] * matrix(2,0) + vector[Y] * matrix(2,1) + vector[Z] * matrix(2,2) + w * matrix(2,3));
+		vector.x() * matrix(0,0) + vector.y() * matrix(0,1) + vector.z() * matrix(0,2) + w * matrix(0,3),
+		vector.x() * matrix(1,0) + vector.y() * matrix(1,1) + vector.z() * matrix(1,2) + w * matrix(1,3),
+		vector.x() * matrix(2,0) + vector.y() * matrix(2,1) + vector.z() * matrix(2,2) + w * matrix(2,3));
 }
 
 Matrix4 rh::newRotationX(float radians)
@@ -107,9 +107,9 @@ Matrix4 rh::newLookAt(const Vector3& position, const Vector3& target, const Vect
 	float dz = -zaxis.dot(position);
 
 	return Matrix4(
-		xaxis[X], yaxis[X], zaxis[X], 0,
-		xaxis[Y], yaxis[Y], zaxis[Y], 0,
-		xaxis[Z], yaxis[Z], zaxis[Z], 0,
+		xaxis.x(), yaxis.x(), zaxis.x(), 0,
+		xaxis.y(), yaxis.y(), zaxis.y(), 0,
+		xaxis.z(), yaxis.z(), zaxis.z(), 0,
 		      dx,       dy,       dz, 1);
 }
 
@@ -142,21 +142,21 @@ Matrix4 rh::newFovPerspective(float fovy, float aspect, float near, float far)
 
 #pragma region Left hand
 
-Vector4 lh::transform3d(const Matrix4& matrix, Vector4& vector)
+Vector4 lh::transform3d(const Matrix4& matrix, const Vector4& vector)
 {
 	return Vector4(
-		matrix(0,0) * vector[X] + matrix(0,1) * vector[Y] + matrix(0,2) * vector[Z] + matrix(0,3) * vector[W],
-		matrix(1,0) * vector[X] + matrix(1,1) * vector[Y] + matrix(1,2) * vector[Z] + matrix(1,3) * vector[W],
-		matrix(2,0) * vector[X] + matrix(2,1) * vector[Y] + matrix(2,2) * vector[Z] + matrix(2,3) * vector[W],
-		matrix(3,0) * vector[X] + matrix(3,1) * vector[Y] + matrix(3,2) * vector[Z] + matrix(3,3) * vector[W]);
+		matrix(0,0) * vector.x() + matrix(0,1) * vector.y() + matrix(0,2) * vector.z() + matrix(0,3) * vector.w(),
+		matrix(1,0) * vector.x() + matrix(1,1) * vector.y() + matrix(1,2) * vector.z() + matrix(1,3) * vector.w(),
+		matrix(2,0) * vector.x() + matrix(2,1) * vector.y() + matrix(2,2) * vector.z() + matrix(2,3) * vector.w(),
+		matrix(3,0) * vector.x() + matrix(3,1) * vector.y() + matrix(3,2) * vector.z() + matrix(3,3) * vector.w());
 }
 
-Vector3 lh::transform3d(const Matrix4& matrix, Vector3& vector, float w)
+Vector3 lh::transform3d(const Matrix4& matrix, const Vector3& vector, float w)
 {
 	return Vector3(
-		matrix(0,0) * vector[X] + matrix(0,1) * vector[Y] + matrix(0,2) * vector[Z] + matrix(0,3) * w,
-		matrix(1,0) * vector[X] + matrix(1,1) * vector[Y] + matrix(1,2) * vector[Z] + matrix(1,3) * w,
-		matrix(2,0) * vector[X] + matrix(2,1) * vector[Y] + matrix(2,2) * vector[Z] + matrix(2,3) * w);
+		matrix(0,0) * vector.x() + matrix(0,1) * vector.y() + matrix(0,2) * vector.z() + matrix(0,3) * w,
+		matrix(1,0) * vector.x() + matrix(1,1) * vector.y() + matrix(1,2) * vector.z() + matrix(1,3) * w,
+		matrix(2,0) * vector.x() + matrix(2,1) * vector.y() + matrix(2,2) * vector.z() + matrix(2,3) * w);
 }
 
 Matrix4 lh::newRotationX(float radians)
@@ -218,9 +218,9 @@ Matrix4 lh::newLookAt(const Vector3& position, const Vector3& target, const Vect
 	float dz = -zaxis.dot(position);
 
 	return Matrix4(
-		xaxis[X], yaxis[X], zaxis[X], 0,
-		xaxis[Y], yaxis[Y], zaxis[Y], 0,
-		xaxis[Z], yaxis[Z], zaxis[Z], 0,
+		xaxis.x(), yaxis.x(), zaxis.x(), 0,
+		xaxis.y(), yaxis.y(), zaxis.y(), 0,
+		xaxis.z(), yaxis.z(), zaxis.z(), 0,
 		      dx,       dy,       dz, 1);
 }
 
