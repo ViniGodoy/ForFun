@@ -13,7 +13,7 @@ void reportTesting(const std::string& what)
 void exitError()
 {
 	system("pause");
-	exit(1);		
+	exit(1);
 }
 
 void assertTrue(int line, bool value)
@@ -26,7 +26,7 @@ void assertTrue(int line, bool value)
 
 void assertIntEquals(int line, int desired, int value)
 {
-	if (desired != value) 
+	if (desired != value)
 	{
 		cerr << "Assertion failed at line " << line << "! Value was " << value << " and should be " << desired << "." << endl;
 		exitError();
@@ -43,29 +43,29 @@ void assertEquals(int line, float desired, float value, float delta)
 
 void assertEquals(int line, float x, float y, const Vector2& vector, float delta)
 {
-	assertEquals(line, x, vector[X], delta);
-	assertEquals(line, y, vector[Y], delta);	
+	assertEquals(line, x, vector.x(), delta);
+	assertEquals(line, y, vector.y(), delta);
 }
 
 void assertEquals(int line, float x, float y, float z, const Vector3& vector, float delta)
 {
-	assertEquals(line, x, vector[X], delta);
-	assertEquals(line, y, vector[Y], delta);	
-	assertEquals(line, z, vector[Z], delta);
+	assertEquals(line, x, vector.x(), delta);
+	assertEquals(line, y, vector.y(), delta);
+	assertEquals(line, z, vector.z(), delta);
 }
 
 void assertEquals(int line, float x, float y, float z, float w, const Vector4& vector, float delta)
 {
-	assertEquals(line, x, vector[X], delta);
-	assertEquals(line, y, vector[Y], delta);	
-	assertEquals(line, z, vector[Z], delta);
-	assertEquals(line, w, vector[W], delta);
+	assertEquals(line, x, vector.x(), delta);
+	assertEquals(line, y, vector.y(), delta);
+	assertEquals(line, z, vector.z(), delta);
+	assertEquals(line, w, vector.w(), delta);
 }
 
-void assertEquals(int line, 
-	float a, float b, float c, 
+void assertEquals(int line,
+	float a, float b, float c,
 	float d, float e, float f,
-	float g, float h, float k, const Matrix3& matrix, 
+	float g, float h, float k, const Matrix3& matrix,
 	float delta)
 {
 	assertEquals(line+1, a, matrix(0,0), delta);
@@ -76,16 +76,16 @@ void assertEquals(int line,
 	assertEquals(line+2, f, matrix(1,2), delta);
 	assertEquals(line+3, g, matrix(2,0), delta);
 	assertEquals(line+3, h, matrix(2,1), delta);
-	assertEquals(line+3, k, matrix(2,2), delta);	
+	assertEquals(line+3, k, matrix(2,2), delta);
 }
 
-void assertEquals(int line, 
+void assertEquals(int line,
 	float a, float b, float c, float d,
 	float e, float f, float g, float h,
 	float i, float j, float k, float l,
-	float m, float n, float o, float p, 
+	float m, float n, float o, float p,
 	const Matrix4& matrix, float delta)
-{	
+{
 	assertEquals(line+1, a, matrix(0,0), delta);
 	assertEquals(line+1, b, matrix(0,1), delta);
 	assertEquals(line+1, c, matrix(0,2), delta);
