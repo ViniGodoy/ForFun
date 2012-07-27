@@ -174,7 +174,7 @@ int main(int argc, char* argv[])
 
 	drawTraces(sw);
 	SDL_Delay(DELAY_BETWEEN_TESTS);
-	/*
+
 	for (int i = 0; i < 5; i++)
 	{
 		drawPoints(sw);
@@ -197,7 +197,7 @@ int main(int argc, char* argv[])
 	{
 		drawFlatTriangles(sw);
 		SDL_Delay(DELAY_BETWEEN_TESTS);
-	}*/
+	}
 
 	for (int i = 0; i < 5; i++)
 	{
