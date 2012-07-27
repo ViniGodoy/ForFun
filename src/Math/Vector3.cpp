@@ -233,10 +233,26 @@ std::ostream& fun::math::operator<<(std::ostream& output, const Vector3& p)
 	return output << "(" << p.x() << "," << p.y() << "," << p.z() << ")";
 }
 
-Vector3 saturate(const Vector3& color)
+Vector3 fun::math::saturate(const Vector3& color)
 {
 	Vector3 v;
 	for (int i = 0; i < color.dim(); ++i)
 		v[i] = saturate(color[i]);
 	return v;
+}
+
+Vector3 fun::math::baricenter2d(int x0, int y0, int x1, int y1, int x2, int y2, int px, int py)
+{
+	int y0y2 = y0 - y2;
+	int x1x2 = x1 - x2;
+	int y1y2 = y1 - y2;
+	int x2x0 = x2 - x0;
+
+	float areaDenom = 1.0f / (y0y2*x1x2+y1y2*x2x0);
+
+	Vector3 b;
+	b[0] = ((py - y2)*x1x2 + y1y2*(x2 - px)) * areaDenom;
+	b[1] = ((py - y0)*x2x0 + (-y0y2)*(x0 - px)) * areaDenom;
+	b[2] = 1.0f - b[0] - b[1];
+	return b;
 }

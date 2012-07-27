@@ -141,7 +141,7 @@ void drawFlatTriangles(SwapChain& sw)
 			400,0,
 			799,599,
 			0,499,
-			PURE_COLORS[(time % 7)+1]);
+			Vector4(0.5, 0.5, 0.5));
 		count++;
 		time = SDL_GetTicks() - before;
 	}
@@ -154,13 +154,12 @@ void drawTriangles(SwapChain& sw)
 	long time = 0;
 	int count = 0;
 	long before = SDL_GetTicks();
-
 	while (time < 1000)
 	{
 		sw.backBuffer().drawTriangle(
-			400,0, RED,
+			400,0, BLUE,
 			799,499, GREEN,
-			0,599, BLUE);
+			0,599, RED);
 		count++;
 		time = SDL_GetTicks() - before;
 	}
@@ -173,22 +172,15 @@ int main(int argc, char* argv[])
 	srand(time(NULL));
 	SwapChain sw(WIDTH,HEIGHT, false);
 
-	/*drawTraces(sw);
+	drawTraces(sw);
 	SDL_Delay(DELAY_BETWEEN_TESTS);
-
+	/*
 	for (int i = 0; i < 5; i++)
 	{
 		drawPoints(sw);
 		SDL_Delay(DELAY_BETWEEN_TESTS);
 	}
-	*/
-	for (int i = 0; i < 5; i++)
-	{
-		drawLines(sw);
-		SDL_Delay(DELAY_BETWEEN_TESTS);
-	}
 
-	/*
 	for (int i = 0; i < 5; i++)
 	{
 		drawFlatLines(sw);
@@ -197,9 +189,15 @@ int main(int argc, char* argv[])
 
 	for (int i = 0; i < 5; i++)
 	{
-		drawFlatTriangles(sw);
+		drawLines(sw);
 		SDL_Delay(DELAY_BETWEEN_TESTS);
 	}
+
+	for (int i = 0; i < 5; i++)
+	{
+		drawFlatTriangles(sw);
+		SDL_Delay(DELAY_BETWEEN_TESTS);
+	}*/
 
 	for (int i = 0; i < 5; i++)
 	{
@@ -207,7 +205,7 @@ int main(int argc, char* argv[])
 		SDL_Delay(DELAY_BETWEEN_TESTS);
 	}
 
-	SDL_Delay(3000);*/
+	SDL_Delay(3000);
 
 	return 0;
 }

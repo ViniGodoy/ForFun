@@ -37,7 +37,9 @@ namespace render {
 	{
 		private:
 			SDL_Surface* surface;
-			PixelBuffer(SDL_Surface* _surface);
+			PixelBuffer(SDL_Surface* _surface);			
+			unsigned colorToUnsigned(const math::Vector4& color);
+			PixelBuffer& set(int x, int y, unsigned color);
 		
 		public:		
 			friend class SwapChain;

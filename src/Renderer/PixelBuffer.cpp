@@ -95,8 +95,7 @@ const Vector4 PixelBuffer::operator() (int x, int y) const
 	float a = static_cast<unsigned char>(temp) / 255.0f;
 	return Vector4(r, g, b, a);
 }
-
-PixelBuffer& PixelBuffer::set(int x, int y, const Vector4& color)
+unsigned PixelBuffer::colorToUnsigned(const Vector4& color)
 {
 	unsigned char r = static_cast<unsigned char>(color.r() * 255);
 	unsigned char g = static_cast<unsigned char>(color.g() * 255);
@@ -107,9 +106,19 @@ PixelBuffer& PixelBuffer::set(int x, int y, const Vector4& color)
 	finalColor |= (r >> surface->format->Rloss) << surface->format->Rshift;
 	finalColor |= (g >> surface->format->Gloss) << surface->format->Gshift;
 	finalColor |= (b >> surface->format->Bloss) << surface->format->Bshift;
+	return finalColor;
+}
 
-	((Uint32*)surface->pixels)[(y * surface->w) + x] = finalColor;
-	return *this;
+PixelBuffer& PixelBuffer::set(int x, int y, const Vector4& color)
+{
+	return set(x, y, colorToUnsigned(color));
+}
+
+PixelBuffer& PixelBuffer::set(int x, int y, unsigned color)
+{
+	if (x >= 0 && x < surface->w && y >= 0 && y < surface->h)
+		((Uint32*)surface->pixels)[(y * surface->w) + x] = color;
+	return (*this);
 }
 
 void PixelBuffer::drawLine(
@@ -124,19 +133,23 @@ void PixelBuffer::drawLine(
 	if (bresenham(x0, y0, x1, y1, points))
 		std::swap(color0, color1);
 
+	//Flat line
 	if (color0 == color1)
-		for (unsigned i = 0; i < points.size(); ++i)
-			set(points[i].x, points[i].y, color0);
-	else
 	{
-		Vector4 colorStep = (color1 - color0) / static_cast<float>(points.size());
-		Vector4 color(color0);
-
+		unsigned color = colorToUnsigned(color0);
 		for (unsigned i = 0; i < points.size(); ++i)
-		{
 			set(points[i].x, points[i].y, color);
-			color += colorStep;
-		}
+		return;
+	}
+
+	//Shaded line
+	Vector4 colorStep = (color1 - color0) / static_cast<float>(points.size());
+	Vector4 color(color0);
+
+	for (unsigned i = 0; i < points.size(); ++i)
+	{
+		set(points[i].x, points[i].y, color);
+		color += colorStep;
 	}
 }
 
@@ -203,34 +216,16 @@ void PixelBuffer::drawTriangle(int x0, int y0,
 	int miny, maxy;
 	int* minx, *maxx;
 	calculateEdges(x0, y0, x1, y1, x2, y2, miny, maxy, &minx, &maxx);
-
+	unsigned c = colorToUnsigned(color);
 	for (int y = miny; y <= maxy; ++y)
 		for (int x = minx[y]; x <= maxx[y]; ++x)
-			set(x, y, color);
+			set(x, y, c);
 
 	delete [] minx;
 	delete [] maxx;
 }
 
-Vector3 baricentric(
-	int x0, int y0,
-	int x1, int y1,
-	int x2, int y2,
-	int px, int py)
-{
-	int y0y2 = y0 - y2;
-	int x1x2 = x1 - x2;
-	int y1y2 = y1 - y2;
-	int x2x0 = x2 - x0;
 
-	float areaDenom = 1.0f / (y0y2*x1x2+y1y2*x2x0);
-
-	Vector3 b;
-	b[0] = ((py - y2)*x1x2 + y1y2*(x2 - px)) * areaDenom;
-	b[1] = ((py - y0)*x2x0 + (-y0y2)*(x0 - px)) * areaDenom;
-	b[2] = 1.0f - b[0] - b[1];
-	return b;
-}
 
 /**
 	* Draws a triangle
@@ -247,7 +242,7 @@ void PixelBuffer::drawTriangle(
 	for (int y = miny; y <= maxy; ++y)
 		for (int x = minx[y]; x <= maxx[y]; ++x)
 		{
-			Vector3 b = baricentric(x0, y0, x1, y1, x2, y2, x, y);
+			Vector3 b = baricenter2d(x0, y0, x1, y1, x2, y2, x, y);
 			Vector4 c(color0);
 			c *= b.x();
 			c += b.y() * color1;
