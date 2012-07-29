@@ -136,9 +136,9 @@ void drawFlatTriangles(SwapChain& sw)
 	{
 		unsigned char tone = static_cast<unsigned char>(time % 255);
 		sw.backBuffer().drawTriangle(
-			400,0,
+			799,0,
 			799,599,
-			0,499,
+			0,599,
 			Vector4(0.5, 0.5, 0.5));
 		count++;
 		time = SDL_GetTicks() - before;
@@ -155,8 +155,8 @@ void drawTriangles(SwapChain& sw)
 	while (time < 1000)
 	{
 		sw.backBuffer().drawTriangle(
-			400,0, BLUE,
-			799,499, GREEN,
+			0,0, BLUE,
+			799,0, GREEN,
 			0,599, RED);
 		count++;
 		time = SDL_GetTicks() - before;
@@ -169,8 +169,6 @@ int main(int argc, char* argv[])
 {
 	srand(12345U);
 	SwapChain sw(WIDTH,HEIGHT, false);
-
-	drawTraces(sw);
 
 	for (int i = 0; i < 5; i++)
 		drawTriangles(sw);
@@ -186,6 +184,8 @@ int main(int argc, char* argv[])
 
 	for (int i = 0; i < 5; i++)
 		drawPoints(sw);
+
+	drawTraces(sw);
 
 	SDL_Delay(3000);
 
