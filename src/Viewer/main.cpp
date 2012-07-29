@@ -22,8 +22,6 @@
 #include "..\Renderer\SwapChain.hpp"
 #include "..\Renderer\Color.hpp"
 
-#include <time.h>
-
 #include <SDL.h>
 #include <iostream>
 
@@ -169,7 +167,7 @@ void drawTriangles(SwapChain& sw)
 
 int main(int argc, char* argv[])
 {
-	srand(time(NULL));
+	srand(12345U);
 	SwapChain sw(WIDTH,HEIGHT, false);
 
 	drawTraces(sw);
