@@ -193,5 +193,28 @@ namespace math {
 			return int32(val);
 		#endif
 	}
+
+	/**
+	 * Calculates the minimum value
+	 */
+	template <typename T>
+	inline T minimum(T a, T b, T c)
+	{
+		return a < b ? 
+			((a < c) ? a : c) :
+			((b < c) ? b : c);		
+	}
+
+	/**
+	 * Calculates the maximum value
+	 */
+	template <typename T>
+	T maximum(T a, T b, T c)
+	{
+		return a > b ? 
+			((a > c) ? a : c) :
+			((b > c) ? b : c);		
+	}
+
 }}
 #endif // MATHUTIL_H_INCLUDED
