@@ -324,7 +324,7 @@ namespace math {
 		*/
 		Vector3 saturate(const Vector3& color);
 
-		Vector3 baricenter2d(int x0, int y0, int x1, int y1, int x2, int y2, int px, int py);
+		Vector3 barycenter2d(int x0, int y0, int x1, int y1, int x2, int y2, int px, int py);
 }}
 
 namespace std

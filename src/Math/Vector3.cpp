@@ -241,7 +241,7 @@ Vector3 fun::math::saturate(const Vector3& color)
 	return v;
 }
 
-Vector3 fun::math::baricenter2d(int x0, int y0, int x1, int y1, int x2, int y2, int px, int py)
+Vector3 fun::math::barycenter2d(int x0, int y0, int x1, int y1, int x2, int y2, int px, int py)
 {
 	int y0y2 = y0 - y2;
 	int x1x2 = x1 - x2;

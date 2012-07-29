@@ -235,15 +235,21 @@ void PixelBuffer::drawTriangle(
 
 	calculateEdges(x0, y0, x1, y1, x2, y2, miny, maxy, &minx, &maxx);
 	for (int y = miny; y <= maxy; ++y)
+	{
+		Vector3 b = barycenter2d(x0, y0, x1, y1, x2, y2, minx[y], y);
+		Vector4 minColor = color0 * b.x() + color1 * b.y() + color2 * b.z();
+
+		b = barycenter2d(x0, y0, x1, y1, x2, y2, maxx[y], y);
+		Vector4 maxColor = color0 * b.x() + color1 * b.y() + color2 * b.z();
+
+		Vector4 factor = (maxColor - minColor) / (maxx[y] - minx[y]);
+
 		for (int x = minx[y]; x <= maxx[y]; ++x)
 		{
-			Vector3 b = baricenter2d(x0, y0, x1, y1, x2, y2, x, y);
-			Vector4 c(color0);
-			c *= b.x();
-			c += b.y() * color1;
-			c += b.z() * color2;
-			set(x, y, c);
+			set(x, y, minColor);
+			minColor += factor;
 		}
+	}
 
 	delete [] minx;
 	delete [] maxx;
