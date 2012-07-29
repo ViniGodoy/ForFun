@@ -32,6 +32,52 @@ using namespace fun::render;
 using namespace fun::math;
 
 
+//-----------------------------------------------------------------------------
+//Auxiliary functions
+//-----------------------------------------------------------------------------
+void updateMinMax(const std::vector<Point>& points, int* min, int* max)
+{
+	for (unsigned i = 0; i < points.size(); ++i)
+	{
+		Point p = points[i];
+		if (p.x < min[p.y]) min[p.y] = p.x;
+		if (p.x > max[p.y]) max[p.y] = p.x;
+	}
+}
+
+void calculateEdges(int x0, int y0,
+	int x1, int y1,
+	int x2, int y2,
+	int& miny,
+	int& maxy,
+	int** edgeMin,
+	int** edgeMax)
+{
+	miny = minimum(y0, y1, y2);
+	maxy = maximum(y0, y1, y2);
+
+	int* minx = new int[maxy+1];
+	int* maxx = new int[maxy+1];
+	for (int i = miny; i <= maxy; ++i) minx[i] = std::numeric_limits<int>::max();
+	for (int i = miny; i <= maxy; ++i) maxx[i] = std::numeric_limits<int>::min();
+
+	std::vector<Point> tmp;
+
+	bresenham(x0, y0, x1, y1, tmp);
+	updateMinMax(tmp, minx, maxx);
+
+	bresenham(x1, y1, x2, y2, tmp);
+	updateMinMax(tmp, minx, maxx);
+
+	bresenham(x2, y2, x0, y0, tmp);
+	updateMinMax(tmp, minx, maxx);
+	*edgeMin = minx;
+	*edgeMax = maxx;
+}
+
+//-----------------------------------------------------------------------------
+// PixelBuffer class
+//-----------------------------------------------------------------------------
 PixelBuffer::PixelBuffer(SDL_Surface* _surface)
 	: surface(_surface)
 {
@@ -65,6 +111,7 @@ PixelBuffer& PixelBuffer::operator =(const PixelBuffer& other)
 const Vector4 PixelBuffer::operator() (int x, int y) const
 {
 	unsigned pixelColor = ((Uint32*)surface->pixels)[(y * surface->w) + x];
+	float factor = 1 / 255.0f;
 
 	unsigned int temp = 0;
 
@@ -72,27 +119,27 @@ const Vector4 PixelBuffer::operator() (int x, int y) const
 
 	/* Get Red component */
 	temp = pixelColor & fmt->Rmask;  /* Isolate red component */
-	temp = temp >> fmt->Rshift; /* Shift it down to 8-bit */
-	temp = temp << fmt->Rloss;  /* Expand to a full 8-bit number */
-	float r = static_cast<unsigned char>(temp) / 255.0f;
+	temp >>= fmt->Rshift;			 /* Shift it down to 8-bit */
+	temp <<= fmt->Rloss;			 /* Expand to a full 8-bit number */
+	float r = temp * factor;
 
 	/* Get Green component */
 	temp = pixelColor & fmt->Gmask;  /* Isolate red component */
-	temp = temp >> fmt->Gshift; /* Shift it down to 8-bit */
-	temp = temp << fmt->Gloss;  /* Expand to a full 8-bit number */
-	float g = static_cast<unsigned char>(temp) / 255.0f;
+	temp >>= fmt->Gshift;			 /* Shift it down to 8-bit */
+	temp <<= fmt->Gloss;			 /* Expand to a full 8-bit number */
+	float g = temp * factor;
 
 	/* Get Blue component */
 	temp = pixelColor & fmt->Bmask;  /* Isolate red component */
-	temp = temp >> fmt->Bshift; /* Shift it down to 8-bit */
-	temp = temp << fmt->Bloss;  /* Expand to a full 8-bit number */
-	float b = static_cast<unsigned char>(temp) / 255.0f;
+	temp >>= fmt->Bshift;			 /* Shift it down to 8-bit */
+	temp <<= fmt->Bloss;			 /* Expand to a full 8-bit number */
+	float b = temp * factor;
 
 	/* Get Alpha component */
 	temp = pixelColor & fmt->Amask;  /* Isolate red component */
-	temp = temp >> fmt->Ashift; /* Shift it down to 8-bit */
-	temp = temp << fmt->Aloss;  /* Expand to a full 8-bit number */
-	float a = static_cast<unsigned char>(temp) / 255.0f;
+	temp >>= fmt->Ashift;			 /* Shift it down to 8-bit */
+	temp <<= fmt->Aloss;		     /* Expand to a full 8-bit number */
+	float a = temp * factor;
 	return Vector4(r, g, b, a);
 }
 
@@ -103,10 +150,10 @@ unsigned PixelBuffer::colorToUnsigned(const Vector4& color)
 	int b = roundToInt(color.b() * 255);
 	int a = roundToInt(color.a() * 255);
 
-	unsigned finalColor = (a >> surface->format->Aloss) << surface->format->Ashift;
-	finalColor |= (r >> surface->format->Rloss) << surface->format->Rshift;
-	finalColor |= (g >> surface->format->Gloss) << surface->format->Gshift;
-	finalColor |= (b >> surface->format->Bloss) << surface->format->Bshift;
+	unsigned finalColor = ((a >>= surface->format->Aloss) <<= surface->format->Ashift);
+	finalColor |= ((r >>= surface->format->Rloss) <<= surface->format->Rshift);
+	finalColor |= ((g >>= surface->format->Gloss) <<= surface->format->Gshift);
+	finalColor |= ((b >>= surface->format->Bloss) <<= surface->format->Bshift);
 	return finalColor;
 }
 
@@ -117,8 +164,7 @@ PixelBuffer& PixelBuffer::set(int x, int y, const Vector4& color)
 
 PixelBuffer& PixelBuffer::set(int x, int y, unsigned color)
 {
-	if (x >= 0 && x < surface->w && y >= 0 && y < surface->h)
-		((Uint32*)surface->pixels)[(y * surface->w) + x] = color;
+	((Uint32*)surface->pixels)[(y * surface->w) + x] = color;
 	return (*this);
 }
 
@@ -152,58 +198,6 @@ void PixelBuffer::drawLine(
 		set(points[i].x, points[i].y, color);
 		color += colorStep;
 	}
-}
-
-void updateMinMax(const std::vector<Point>& points, int* min, int* max)
-{
-	for (unsigned i = 0; i < points.size(); ++i)
-	{
-		Point p = points[i];
-		if (p.x < min[p.y]) min[p.y] = p.x;
-		if (p.x > max[p.y]) max[p.y] = p.x;
-	}
-}
-
-int min(int a, int b, int c)
-{
-	int m = a < b ? a : b;
-	return m < c ? m : c;
-}
-
-int max(int a, int b, int c)
-{
-	int m = a > b ? a : b;
-	return m > c ? m : c;
-}
-
-void calculateEdges(int x0, int y0,
-	int x1, int y1,
-	int x2, int y2,
-	int& miny,
-	int& maxy,
-	int** edgeMin,
-	int** edgeMax)
-{
-	miny = min(y0, y1, y2);
-	maxy = max(y0, y1, y2);
-
-	int* minx = new int[maxy+1];
-	int* maxx = new int[maxy+1];
-	for (int i = miny; i <= maxy; ++i) minx[i] = std::numeric_limits<int>::max();
-	for (int i = miny; i <= maxy; ++i) maxx[i] = std::numeric_limits<int>::min();
-
-	std::vector<Point> tmp;
-
-	bresenham(x0, y0, x1, y1, tmp);
-	updateMinMax(tmp, minx, maxx);
-
-	bresenham(x1, y1, x2, y2, tmp);
-	updateMinMax(tmp, minx, maxx);
-
-	bresenham(x2, y2, x0, y0, tmp);
-	updateMinMax(tmp, minx, maxx);
-	*edgeMin = minx;
-	*edgeMax = maxx;
 }
 
 /**

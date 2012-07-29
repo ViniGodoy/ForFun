@@ -29,7 +29,7 @@ struct SDL_Surface;
 namespace fun {
 namespace render {
 	class SwapChain;
-
+	
 	/**
 	 * Represents a buffer of pixels.
 	 */
