@@ -156,7 +156,7 @@ namespace math {
 	 *
 	 * See complete explanation in http://stereopsis.com/sree/fpu2006.html
 	 */
-	inline int floorToInt(double value, double dme=-DOUBLE_MAGIC_ROUND)
+	inline int floorToInt(double value, double dme=DOUBLE_MAGIC_ROUND)
 	{
 		#ifndef _FUN_DISABLE_FLOAT_OPTIMIZATION_
 			return roundToInt(value - dme);
@@ -190,7 +190,7 @@ namespace math {
 		#ifndef _FUN_DISABLE_FLOAT_OPTIMIZATION_
 			return value<0 ? roundToInt(value-dme) : roundToInt(value+dme);
 		#else
-			return int32(val);
+			return static_cast<int>(val);
 		#endif
 	}
 

@@ -32,7 +32,7 @@ using namespace std;
 const int WIDTH = 800;
 const int HEIGHT = 600;
 
-const int DELAY_BETWEEN_TESTS = 500;
+const int DELAY_BETWEEN_TESTS = 1;
 
 void drawTraces(SwapChain& sw)
 {
@@ -171,37 +171,21 @@ int main(int argc, char* argv[])
 	SwapChain sw(WIDTH,HEIGHT, false);
 
 	drawTraces(sw);
-	SDL_Delay(DELAY_BETWEEN_TESTS);
 
 	for (int i = 0; i < 5; i++)
-	{
-		drawPoints(sw);
-		SDL_Delay(DELAY_BETWEEN_TESTS);
-	}
-
-	for (int i = 0; i < 5; i++)
-	{
-		drawFlatLines(sw);
-		SDL_Delay(DELAY_BETWEEN_TESTS);
-	}
-
-	for (int i = 0; i < 5; i++)
-	{
-		drawLines(sw);
-		SDL_Delay(DELAY_BETWEEN_TESTS);
-	}
-
-	for (int i = 0; i < 5; i++)
-	{
-		drawFlatTriangles(sw);
-		SDL_Delay(DELAY_BETWEEN_TESTS);
-	}
-
-	for (int i = 0; i < 5; i++)
-	{
 		drawTriangles(sw);
-		SDL_Delay(DELAY_BETWEEN_TESTS);
-	}
+	
+	for (int i = 0; i < 5; i++)
+		drawFlatTriangles(sw);
+
+	for (int i = 0; i < 5; i++)
+		drawFlatLines(sw);
+
+	for (int i = 0; i < 5; i++)
+		drawLines(sw);
+
+	for (int i = 0; i < 5; i++)
+		drawPoints(sw);
 
 	SDL_Delay(3000);
 
