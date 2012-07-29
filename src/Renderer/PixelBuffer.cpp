@@ -95,12 +95,13 @@ const Vector4 PixelBuffer::operator() (int x, int y) const
 	float a = static_cast<unsigned char>(temp) / 255.0f;
 	return Vector4(r, g, b, a);
 }
+
 unsigned PixelBuffer::colorToUnsigned(const Vector4& color)
 {
-	unsigned char r = static_cast<unsigned char>(color.r() * 255);
-	unsigned char g = static_cast<unsigned char>(color.g() * 255);
-	unsigned char b = static_cast<unsigned char>(color.b() * 255);
-	unsigned char a = static_cast<unsigned char>(color.a() * 255);
+	int r = roundToInt(color.r() * 255);
+	int g = roundToInt(color.g() * 255);
+	int b = roundToInt(color.b() * 255);
+	int a = roundToInt(color.a() * 255);
 
 	unsigned finalColor = (a >> surface->format->Aloss) << surface->format->Ashift;
 	finalColor |= (r >> surface->format->Rloss) << surface->format->Rshift;

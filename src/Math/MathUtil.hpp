@@ -25,6 +25,21 @@
 
 namespace fun {
 namespace math {
+	//Exponent and mantissa constants
+	//See complete explanation in http://stereopsis.com/sree/fpu2006.html
+	#if _FUN_BIG_ENDIAN_
+		static const int IEXP = 0;
+		static const int IMAN = 1;
+	#else
+		static const int IEXP = 1;
+		static const int IMAN = 0;
+	#endif 
+
+	static const double DOUBLE_MAGIC = double(6755399441055744.0); 		//2^52 * 1.5,  uses limited precisicion to floor
+	static const double DOUBLE_MAGIC_DELTA = (1.5e-8);					//almost .5f = .5f + 1e^(number of exp bit)
+	static const double DOUBLE_MAGIC_ROUND	= (.5f-DOUBLE_MAGIC_DELTA);	//almost .5f = .5f - 1e^(number of exp bit)
+
+	//Other useful constants
 	static const double PI = 3.14159265358979323846;
 	static const double E = 2.7182818284590452354;
 	static const double ONE_DEGREE = 180.0 / PI;    
@@ -115,6 +130,68 @@ namespace math {
 	inline unsigned saturate(unsigned value)
 	{
 		return value > 255 ? 255 : value;
+	}
+
+	/**
+	 * Round and conversion to int operation.
+	 * Float optimizations can be disabled by defining 
+	 * _FUN_DISABLE_FLOAT_OPTIMIZATION_ directive.
+	 *
+	 * See complete explanation in http://stereopsis.com/sree/fpu2006.html
+	 */
+	inline int roundToInt(double value, double dmr=DOUBLE_MAGIC)
+	{
+		#ifndef _FUN_DISABLE_FLOAT_OPTIMIZATION_
+			value	= value + dmr;
+			return ((int*)&value)[IMAN];			
+		#else
+			return int32(floor(val+.5));
+		#endif
+	}
+
+	/**
+	 * Optimized floor and conversion to int operation
+	 * Float optimizations can be disabled by defining 
+	 * _FUN_DISABLE_FLOAT_OPTIMIZATION_ directive.
+	 *
+	 * See complete explanation in http://stereopsis.com/sree/fpu2006.html
+	 */
+	inline int floorToInt(double value, double dme=-DOUBLE_MAGIC_ROUND)
+	{
+		#ifndef _FUN_DISABLE_FLOAT_OPTIMIZATION_
+			return roundToInt(value - dme);
+		#else
+			return floor(val);
+		#endif
+	}
+
+	/**
+	 * Optimized ceil and conversion to int operation
+	 * Float optimizations can be disabled by defining 
+	 * _FUN_DISABLE_FLOAT_OPTIMIZATION_ directive.
+	 *
+	 * See complete explanation in http://stereopsis.com/sree/fpu2006.html
+	 */
+	inline int ceilToInt(double value, double dme=DOUBLE_MAGIC_ROUND)
+	{
+		#ifndef _FUN_DISABLE_FLOAT_OPTIMIZATION_
+			return roundToInt(value + dme);
+		#else
+			return ceil(val);
+		#endif
+	}
+
+	/**
+	* Optimized cast operation
+	* See complete explanation in http://stereopsis.com/sree/fpu2006.html
+	*/
+	inline int castToInt(double value, double dme)
+	{
+		#ifndef _FUN_DISABLE_FLOAT_OPTIMIZATION_
+			return value<0 ? roundToInt(value-dme) : roundToInt(value+dme);
+		#else
+			return int32(val);
+		#endif
 	}
 }}
 #endif // MATHUTIL_H_INCLUDED
