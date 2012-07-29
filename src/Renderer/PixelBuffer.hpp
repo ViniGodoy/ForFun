@@ -19,7 +19,7 @@
 *
 ******************************************************************************/
 #include <algorithm>
-#include "..\Math\Vector4.hpp"
+#include "../Math/Vector4.hpp"
 
 #if !defined(__PIXELBUFFER_HPP__)
 #define __PIXELBUFFER_HPP__

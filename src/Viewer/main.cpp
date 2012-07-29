@@ -19,8 +19,8 @@
 *
 ******************************************************************************/
 
-#include "..\Renderer\SwapChain.hpp"
-#include "..\Renderer\Color.hpp"
+#include "../Renderer/SwapChain.hpp"
+#include "../Renderer/Color.hpp"
 
 #include <SDL.h>
 #include <iostream>
