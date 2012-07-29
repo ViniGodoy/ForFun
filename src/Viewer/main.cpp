@@ -76,7 +76,7 @@ void drawPoints(SwapChain& sw)
 		points++;
 	}
 	sw.flip();
-	cout << "Number of points in one second: " << points << endl;
+	cout << "Points per second: " << points << endl;
 }
 
 void drawFlatLines(SwapChain& sw)
@@ -99,7 +99,7 @@ void drawFlatLines(SwapChain& sw)
 		time = SDL_GetTicks() - before;
 	}
 	sw.flip();
-	cout << "Number of flat lines in one second: " << lines << endl;
+	cout << "Flat lines per second: " << lines << endl;
 }
 
 void drawLines(SwapChain& sw)
@@ -123,7 +123,7 @@ void drawLines(SwapChain& sw)
 		time = SDL_GetTicks() - before;
 	}
 	sw.flip();
-	cout << "Number of lines in one second: " << lines << endl;
+	cout << "Lines per second: " << lines << endl;
 }
 
 void drawFlatTriangles(SwapChain& sw)
@@ -144,7 +144,7 @@ void drawFlatTriangles(SwapChain& sw)
 		time = SDL_GetTicks() - before;
 	}
 	sw.flip();
-	cout << "Number of flat triangles in one second: " << count << endl;
+	cout << "Flat triangles per second: " << count << endl;
 }
 
 void drawTriangles(SwapChain& sw)
@@ -162,7 +162,7 @@ void drawTriangles(SwapChain& sw)
 		time = SDL_GetTicks() - before;
 	}
 	sw.flip();
-	cout << "Number of triangles in one second: " << count << endl;
+	cout << "Triangles per second: " << count << endl;
 }
 
 int main(int argc, char* argv[])
@@ -174,7 +174,7 @@ int main(int argc, char* argv[])
 
 	for (int i = 0; i < 5; i++)
 		drawTriangles(sw);
-	
+
 	for (int i = 0; i < 5; i++)
 		drawFlatTriangles(sw);
 
