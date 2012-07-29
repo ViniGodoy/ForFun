@@ -142,7 +142,7 @@ namespace math {
 	inline int roundToInt(double value, double dmr=DOUBLE_MAGIC)
 	{
 		#ifndef _FUN_DISABLE_FLOAT_OPTIMIZATION_
-			value	= value + dmr;
+			value += dmr;
 			return ((int*)&value)[IMAN];			
 		#else
 			return int32(floor(val+.5));
